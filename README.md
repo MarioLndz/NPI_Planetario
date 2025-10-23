@@ -38,7 +38,7 @@ Las personas con discapacidad visual podrán solicitar que:
 En clase se ha propuesto la página web https://paletton.com/#uid=73U0u0kllllaFw0g0qFqFg0w0aF para poder seleccionar la gama de colores. También se plantea la posibilidad de tener un color corporativo, en donde la marca y el museo gire entorno a dicho color como Ferrari o Coca Cola con el rojo. También podemos contemplar la posibilidad de según emociones tratar e asignar colores según la teoría en la que se basa Inside Out.
 
 ### 3.4-Botones y manos
-Respecto a las manos se recomienda de que no sean visibles, pues de lo contrario taparían visibilidad al usuario, en vez de esto se puede utilizar un puntero a modo de ayuda.
+Respecto a las manos se recomienda de que no sean visibles, pues de lo contrario taparían visibilidad al usuario, en vez de esto se puede utilizar un puntero a modo de ayuda. Ahora en el caso de que por ejemplo se quisiera realizar algún tipo de juego interactivo las manos si que sirven como guía, pero en cambio por ejejmplo, si se muestra una maqueta digital y quieres rotarla con un simple gesto se podrá rotar, y no hace falta una mano. En un caso como este último sería interesante la idea de implementar un video tutorial de una mano que luego desaparaciera que explicase como hacer el movimiento y que luego desapareciera.
 En cuanto a los botones estos deberan estar a una altura natural para la vista.
 
 
