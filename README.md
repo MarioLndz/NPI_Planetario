@@ -36,7 +36,9 @@ Las personas con discapacidad visual podrán solicitar que:
 
 ### 3.3-Colores
 En clase se ha propuesto la página web https://paletton.com/#uid=73U0u0kllllaFw0g0qFqFg0w0aF para poder seleccionar la gama de colores. También se plantea la posibilidad de tener un color corporativo, en donde la marca y el museo gire entorno a dicho color como Ferrari o Coca Cola con el rojo. También podemos contemplar la posibilidad de según emociones tratar e asignar colores según la teoría en la que se basa Inside Out.
-un
-  
+
+### 3.4-Manos y botones
+Respecto a las manos que aparecan en la pantalla estas serán mejor ocultarlas, debido a que tapar contenido, en vez de esto se puede implementar un puntero como ayuda.
+En cuanto a los botones deben estar a una altura natural de la vista.
   
   
