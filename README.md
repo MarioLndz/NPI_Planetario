@@ -48,5 +48,7 @@ La información que este contendrá dependera de la psoición del museo en el qu
 A nivel práctico deberemos tener uan visión genérica de todos los totem que necesitaremos y solamente implemetar 1, 2 ó 3 y del resto podemos tener solamente un versión ilutrativa.
 # Documento final 
 En este se realiza una versión explicativa y detallada de nuestro museo. Para nuestro caso, como es inventado, habría que explicar de forma minucsiosa como se distribuye y donde se situán los token, agente de voz, usos del dispositivo móvil.
+
+Este documento se deberá entregar desde la primera entrega, pero este podrá recibir cambios según vayamos haciendo las prácticas y recibiendo feedback del profesor.
   
   
