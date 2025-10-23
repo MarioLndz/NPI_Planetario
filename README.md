@@ -32,11 +32,13 @@ Las personas con discapacidad visual podrán solicitar que:
 - Mediante el uso del giroscopio se puede implmenentar una visualización de las vistas que se tendrían al estar en el planeta dado.
 - Usando *NFC* el usario podrá acceder a una mayor información de la maqueta en cuestión.
 - 
-- 
 
 ### 3.3-Colores
 En clase se ha propuesto la página web https://paletton.com/#uid=73U0u0kllllaFw0g0qFqFg0w0aF para poder seleccionar la gama de colores. También se plantea la posibilidad de tener un color corporativo, en donde la marca y el museo gire entorno a dicho color como Ferrari o Coca Cola con el rojo. También podemos contemplar la posibilidad de según emociones tratar e asignar colores según la teoría en la que se basa Inside Out.
-un
+
+### 3.4-Botones y manos
+Respecto a las manos se recomienda de que no sean visibles, pues de lo contrario taparían visibilidad al usuario, en vez de esto se puede utilizar un puntero a modo de ayuda.
+En cuanto a los botones estos deberan estar a una altura natural para la vista.
   
   
   
