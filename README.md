@@ -12,6 +12,7 @@
 ### 2.1-Visual
 Las personas con discapacidad visual podrán solicitar que:  
 - El texto sea leído en voz alta, de esta forma por defecto se ofrece una ayuda de voz guiada. Si el usuario no padece ninguna discapadciada de este estilo la ayuda dejará de ser ofrecida.
+- Existe la opción de pegatinas con relieve para poder incluir braile.
 - Las imágenes incluyan una descripción detallada de su contenido.
 - Se considerarán también las opciones de Daltonismo y alto contraste.
 - Se realizará una maqueta a tamaño proporcional de los planetas, así las personas con discapacidad podrán hacerse una idea de la diferencia de tamaño.
@@ -39,6 +40,13 @@ En clase se ha propuesto la página web https://paletton.com/#uid=73U0u0kllllaFw
 ### 3.4-Botones y manos
 Respecto a las manos se recomienda de que no sean visibles, pues de lo contrario taparían visibilidad al usuario, en vez de esto se puede utilizar un puntero a modo de ayuda.
 En cuanto a los botones estos deberan estar a una altura natural para la vista.
-  
+
+
+# Totem
+La información que este contendrá dependera de la psoición del museo en el que se encuentre, así pues podrá tener distintas implementaciones. Se puede hacer que nuestro totem sea muy generico pero que a la hora de la aplicación real esta información irá fraccionada. Es decir, en nuestro totem a nivel de examen podremos acceder a todos las salas y moverme entre ellas, pero a nivel de aplicación habría un único un totem por sala, por tanto ni mucho menos desde el totem se puede realizar una visita general del museo.
+
+A nivel práctico deberemos tener uan visión genérica de todos los totem que necesitaremos y solamente implemetar 1, 2 ó 3 y del resto podemos tener solamente un versión ilutrativa.
+# Documento final 
+En este se realiza una versión explicativa y detallada de nuestro museo. Para nuestro caso, como es inventado, habría que explicar de forma minucsiosa como se distribuye y donde se situán los token, agente de voz, usos del dispositivo móvil.
   
   
