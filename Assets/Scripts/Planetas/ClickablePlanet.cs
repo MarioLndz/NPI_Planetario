@@ -45,10 +45,12 @@ public class PlanetClickable : MonoBehaviour, IPointerClickHandler
 
         // Estimate planet size (radius)
         float radius = 1f;
-        Collider col = GetComponent<Collider>();
-        if (col != null)
-            radius = col.bounds.extents.magnitude;
-
+        MeshRenderer rend = GetComponent<MeshRenderer>();
+        if (rend != null)
+        {
+            // El tamaño visible (en unidades del mundo)
+            radius = rend.bounds.extents.magnitude;
+        }
         // We want to position the camera to the *side* of the planet
         // Vector3.right means we move along the X-axis (you can change to forward/back/right/left)
         Vector3 sideDirection = Vector3.right;

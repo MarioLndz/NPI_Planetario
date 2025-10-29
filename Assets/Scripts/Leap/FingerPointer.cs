@@ -29,6 +29,7 @@ public class LeapMousePointer : MonoBehaviour
 
         Hand hand = frame.Hands[0];
         Finger indexFinger = hand.fingers[(int)Finger.FingerType.INDEX];
+        Finger middleFinger = hand.fingers[(int)Finger.FingerType.MIDDLE];
 
         if (!indexFinger.IsExtended)
         {
@@ -36,39 +37,50 @@ public class LeapMousePointer : MonoBehaviour
             pointerUI.gameObject.SetActive(false);
             return;
         }
-
-        Vector3 tip = indexFinger.TipPosition;
-
-        // 🔹 Ignorar el eje Z (mantener solo plano XY)
-        tip.z = 0f;
-
-        if (!calibrated)
+        else if(middleFinger.IsExtended)
         {
-            neutralTip = tip;
-            smoothedTip = tip;
-            calibrated = true;
+            // Aquí puedes agregar funcionalidad adicional cuando el pulgar también esté extendido
+             return;
+
         }
+        else
+        {
+            Vector3 tip = indexFinger.TipPosition;
 
-        // Suavizado adaptativo
-        float distance = Vector3.Distance(smoothedTip, tip);
-        float adaptiveSmooth = Mathf.Lerp(0.8f, 0.2f, Mathf.Clamp01(distance * 10f));
-        smoothedTip = Vector3.Lerp(smoothedTip, tip, (1 - smoothing) * (1 - adaptiveSmooth) + smoothing);
+            // 🔹 Ignorar el eje Z (mantener solo plano XY)
+            tip.z = 0f;
 
-        // Diferencia en plano XY
-        Vector3 offset = smoothedTip - neutralTip;
+            if (!calibrated)
+            {
+                neutralTip = tip;
+                smoothedTip = tip;
+                calibrated = true;
+            }
 
-        // Solo usar X e Y
-        float x = 0.5f + (invertX ? -1 : 1) * offset.x * sensitivity;
-        float y = 0.5f + (invertY ? -1 : 1) * offset.y * sensitivity;
+            // Suavizado adaptativo
+            float distance = Vector3.Distance(smoothedTip, tip);
+            float adaptiveSmooth = Mathf.Lerp(0.8f, 0.2f, Mathf.Clamp01(distance * 10f));
+            smoothedTip = Vector3.Lerp(smoothedTip, tip, (1 - smoothing) * (1 - adaptiveSmooth) + smoothing);
 
-        // Posición en pantalla
-        Vector3 screenPos = new Vector3(
-            Mathf.Clamp01(x) * Screen.width,
-            Mathf.Clamp01(y) * Screen.height,
-            0
-        );
+            // Diferencia en plano XY
+            Vector3 offset = smoothedTip - neutralTip;
 
-        pointerUI.gameObject.SetActive(true);
-        pointerUI.position = screenPos;
+            // Solo usar X e Y
+            float x = 0.5f + (invertX ? -1 : 1) * offset.x * sensitivity;
+            float y = 0.5f + (invertY ? -1 : 1) * offset.y * sensitivity;
+
+            // Posición en pantalla
+            Vector3 screenPos = new Vector3(
+                Mathf.Clamp01(x) * Screen.width,
+                Mathf.Clamp01(y) * Screen.height,
+                0
+            );
+
+            pointerUI.gameObject.SetActive(true);
+            pointerUI.position = screenPos;
+        }
+        
+
+        
     }
 }
