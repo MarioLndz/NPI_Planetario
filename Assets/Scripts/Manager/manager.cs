@@ -1,6 +1,8 @@
+using TMPro;
 using UnityEngine;
+using static UnityEngine.Rendering.DebugUI;
 
-public class manager : MonoBehaviour
+public class Manager : MonoBehaviour
 {
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -13,9 +15,32 @@ public class manager : MonoBehaviour
     {
 
     }
-    
-    public void clickedStart()
+
+    public GameObject startMenuCanvas;
+    public GameObject PlanetMenu;
+
+    public TMP_Text planetTitle;
+
+    void Awake()
     {
-        Debug.Log("Clicked Start");
+        // Panel oculto desde el principio
+        if (startMenuCanvas) startMenuCanvas.SetActive(true);
+        if (PlanetMenu) PlanetMenu.SetActive(false);
+    }
+
+    public void ClickedStart()
+    {
+        //Debug.Log("Clicked Start");
+        if (startMenuCanvas) startMenuCanvas.SetActive(false);
+    }
+
+    public void ShowPlanetPanel(bool show = true)
+    {
+        if (PlanetMenu) PlanetMenu.SetActive(show);
+    }
+
+    public void SetPlanetTitle(string title)
+    {
+        if (planetTitle) planetTitle.text = title;
     }
 }

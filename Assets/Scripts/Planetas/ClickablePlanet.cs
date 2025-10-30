@@ -11,6 +11,14 @@ public class PlanetClickable : MonoBehaviour, IPointerClickHandler
     private static Quaternion defaultCamRot;
     private static bool isZooming = false;
 
+    [SerializeField] private Manager manager;
+    public string displayName;
+    void Awake()
+    {
+        if (manager == null)
+            manager = Object.FindFirstObjectByType<Manager>(FindObjectsInactive.Include);
+    }
+
     void Start()
     {
         // Store camera default position once
@@ -28,12 +36,18 @@ public class PlanetClickable : MonoBehaviour, IPointerClickHandler
             // Zoom out
             currentTarget = null;
             if (!isZooming) StartCoroutine(ZoomOut());
+
+            if (manager) manager.ShowPlanetPanel(false);
         }
         else
         {
             // Zoom into this planet
             currentTarget = transform;
             if (!isZooming) StartCoroutine(ZoomIn());
+
+            string title = string.IsNullOrWhiteSpace(displayName) ? gameObject.name : displayName;
+            if (manager) manager.SetPlanetTitle(title);   // <-- poner el nombre
+            if (manager) manager.ShowPlanetPanel(true);
         }
     }
 
