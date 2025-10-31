@@ -9,40 +9,53 @@ public class LeapPlanetSelector : MonoBehaviour
     public Camera mainCamera;
     public RectTransform pointerUI;
 
-    [Header("Pinch detection")]
-    [Range(0f, 1f)] public float pinchOnThreshold = 0.8f;
+    [Header("Pinch Detection (Strength)")]
+    [Range(0f, 1f)] public float pinchOnThreshold = 0.9f;
     [Range(0f, 1f)] public float pinchOffThreshold = 0.7f;
 
+    // --- NUEVA VARIABLE ---
+    [Header("Click 'Forgiveness'")]
+    [Tooltip("El 'grosor' del rayo en unidades de Unity. Un valor más alto es más fácil de clickar.")]
+    public float clickRadius = 0.5f;
+    // --- FIN NUEVA VARIABLE ---
+
     private bool isPinching = false;
+    private bool eventSystemChecked = false;
 
     void Start()
     {
-        if (leapProvider == null) Debug.Log("Añadir leapService");
-
-        if (mainCamera == null)
-            mainCamera = Camera.main;
+        // ... (Tu código de Start() sigue igual)
+        if (leapProvider == null) Debug.LogError("Asigna el LeapServiceProvider en el Inspector.");
+        if (mainCamera == null) mainCamera = Camera.main;
+        if (EventSystem.current == null)
+        {
+            Debug.LogError("¡FALTA UN EVENTSYSTEM! Añade uno desde 'UI > Event System'.");
+            eventSystemChecked = false;
+        }
+        else
+        {
+            eventSystemChecked = true;
+        }
     }
 
     void Update()
     {
+        // ... (Tu código de Update() sigue igual)
         Frame frame = leapProvider.CurrentFrame;
         if (frame == null || frame.Hands.Count == 0)
         {
-            isPinching = false;
+            if (isPinching) isPinching = false;
             return;
         }
-
-        // Usa la mano derecha si existe
         Hand hand = frame.Hands.Find(h => h.IsRight) ?? frame.Hands[0];
-        float pinchStrength = hand.PinchStrength;
-
-        // Detección con histéresis
-        if (pinchStrength > pinchOnThreshold && !isPinching)
+        float currentPinchStrength = hand.PinchStrength;
+        if (currentPinchStrength > pinchOnThreshold && !isPinching)
         {
             isPinching = true;
+            Debug.Log($"PINCH ON (Fuerza: {currentPinchStrength})");
             TrySelectPlanet();
         }
-        else if (pinchStrength < pinchOffThreshold && isPinching)
+        else if (currentPinchStrength < pinchOffThreshold && isPinching)
         {
             isPinching = false;
         }
@@ -50,29 +63,34 @@ public class LeapPlanetSelector : MonoBehaviour
 
     public void TrySelectPlanet()
     {
-        if (mainCamera == null || pointerUI == null)
-            return;
+        if (!eventSystemChecked) return;
+        if (mainCamera == null || pointerUI == null) return;
 
-        // Convertir posición del cursor UI (en pantalla) a un rayo 3D
         Vector3 screenPos = pointerUI.position;
         Ray ray = mainCamera.ScreenPointToRay(screenPos);
 
-        if (Physics.Raycast(ray, out RaycastHit hit, 1000f))
+        // --- LÍNEA MODIFICADA ---
+        // Cambiamos Physics.Raycast por Physics.SphereCast
+
+        if (Physics.SphereCast(ray, clickRadius, out RaycastHit hit, 1000f))
         {
-            // ¿Tiene el planeta el script PlanetClickable?
+            // --- FIN LÍNEA MODIFICADA ---
+
             var clickable = hit.collider.GetComponent<PlanetClickable>();
             if (clickable != null)
             {
-                // Crear datos de evento simulados (como si fuera un click real)
                 var eventData = new PointerEventData(EventSystem.current);
                 ExecuteEvents.Execute(clickable.gameObject, eventData, ExecuteEvents.pointerClickHandler);
-
                 Debug.Log($"🌍 Pinch sobre {hit.collider.name} → Click ejecutado.");
             }
             else
             {
-                Debug.Log($"Pinch sobre {hit.collider.name}, pero no es clicable.");
+                Debug.Log($"Pinch sobre {hit.collider.name}, pero no tiene el script 'PlanetClickable'.");
             }
+        }
+        else
+        {
+            Debug.Log("Pinch en el aire, no se golpeó nada.");
         }
     }
 }
