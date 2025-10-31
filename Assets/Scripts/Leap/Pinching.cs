@@ -48,7 +48,7 @@ public class LeapPlanetSelector : MonoBehaviour
         }
     }
 
-    void TrySelectPlanet()
+    public void TrySelectPlanet()
     {
         if (mainCamera == null || pointerUI == null)
             return;
