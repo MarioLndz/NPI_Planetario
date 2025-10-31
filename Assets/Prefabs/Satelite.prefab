@@ -52,7 +52,8 @@ PrefabInstance:
       propertyPath: m_Name
       value: Satelite
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: -484665336064714313, guid: 749d7dff0ab299b48b4c310dc14f400d, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents:

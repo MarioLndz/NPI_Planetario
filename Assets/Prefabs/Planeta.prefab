@@ -140,3 +140,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ClickablePlanet
   zoomDistance: 5
   zoomSpeed: 3
+  maxZoomTime: 2
+  finishDistance: 1
+  manager: {fileID: 0}
+  displayName: 

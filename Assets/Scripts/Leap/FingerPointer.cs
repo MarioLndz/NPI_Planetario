@@ -2,8 +2,6 @@
 using UnityEngine.UI;
 using Leap;
 
-// Añadimos esto para asegurarnos de que el CanvasGroup exista
-[RequireComponent(typeof(CanvasGroup))]
 public class LeapMousePointer : MonoBehaviour
 {
     public LeapServiceProvider leapProvider; // Leap provider
