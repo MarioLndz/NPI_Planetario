@@ -15,14 +15,14 @@ public class PlanetClickable : MonoBehaviour, IPointerClickHandler
     public void OnPointerClick(PointerEventData eventData)
     {
         // 1. Busca el controlador de la cámara (que está en la cámara)
-        if (PlanetZoomController.Instance == null)
+        if (GameManager.Instance == null)
         {
-            Debug.LogError("No se encuentra un PlanetZoomController en la escena.");
+            Debug.LogError("No se encuentra un GameManager en la escena.");
             return;
         }
 
         // 2. Le pide al controlador que haga zoom, pasándole
         //    una referencia a este mismo script de planeta.
-        PlanetZoomController.Instance.RequestZoom(this);
+        GameManager.Instance.RequestZoom(this);
     }
 }

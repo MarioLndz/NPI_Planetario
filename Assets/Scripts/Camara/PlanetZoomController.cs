@@ -1,43 +1,24 @@
 using UnityEngine;
 using System.Collections;
+using System; // <-- para Action
 
 // Pon este script en tu objeto Main Camera
 public class PlanetZoomController : MonoBehaviour
 {
-    // --- Singleton ---
-    // Esto permite que los planetas lo encuentren fácilmente
-    public static PlanetZoomController Instance { get; private set; }
-
     [Header("Configuración de Zoom")]
     public float zoomDuration = 1.5f; // Duración global del zoom
-
-    [Header("Referencias")]
-    // Arrastra tu Manager de UI aquí
-    [SerializeField] private Manager manager;
 
     private Camera cam;
     private Vector3 defaultCamPos;
     private Quaternion defaultCamRot;
 
     private bool isZooming = false;
-    private Transform currentTarget;
+    public PlanetClickable currentTarget;
 
-    void Awake()
-    {
-        // Configura el Singleton
-        if (Instance != null && Instance != this)
-        {
-            Destroy(gameObject);
-        }
-        else
-        {
-            Instance = this;
-        }
+    public event Action<bool> OnZoomCompleted; // true = zoom in, false = zoom out
+    private bool lastZoomIn;                   // recordamos qué acción estamos haciendo
 
-        // Busca el Manager si no está asignado
-        if (manager == null)
-            manager = Object.FindFirstObjectByType<Manager>(FindObjectsInactive.Include);
-    }
+
 
     void Start()
     {
@@ -54,22 +35,24 @@ public class PlanetZoomController : MonoBehaviour
     /// <summary>
     /// El planeta llama a esta función para solicitar un zoom.
     /// </summary>
-    public void RequestZoom(PlanetClickable planet)
+    public bool? RequestZoom(PlanetClickable planet)
     {
-        if (isZooming) return;
+        if (isZooming) return null;
 
-        if (currentTarget == planet.transform)
+        if (currentTarget == planet)
         {
             // --- ZOOM OUT ---
             Debug.Log("Zoom Out");
             currentTarget = null;
+            lastZoomIn = false;
             StartCoroutine(MoveCamera(defaultCamPos, defaultCamRot));
-            if (manager) manager.ShowPlanetPanel(false);
+            return false;
         }
         else
         {
             // --- ZOOM IN ---
-            currentTarget = planet.transform;
+            currentTarget = planet;
+
 
             // Calcula el destino usando los datos del planeta
             float radius = 1f;
@@ -85,12 +68,10 @@ public class PlanetZoomController : MonoBehaviour
             Quaternion targetRot = Quaternion.LookRotation(lookPos - targetPos);
 
             // Inicia el movimiento
+            lastZoomIn = true;
             StartCoroutine(MoveCamera(targetPos, targetRot));
 
-            // Actualiza la UI
-            string title = string.IsNullOrWhiteSpace(planet.displayName) ? planet.gameObject.name : planet.displayName;
-            if (manager) manager.SetPlanetTitle(title);
-            if (manager) manager.ShowPlanetPanel(true);
+            return true;
         }
     }
 
@@ -120,6 +101,8 @@ public class PlanetZoomController : MonoBehaviour
         cam.transform.position = targetPos;
         cam.transform.rotation = targetRot;
         isZooming = false;
+
+        OnZoomCompleted?.Invoke(lastZoomIn);
     }
 
 }

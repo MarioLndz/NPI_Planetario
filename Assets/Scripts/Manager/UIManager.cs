@@ -2,13 +2,11 @@ using TMPro;
 using UnityEngine;
 using static UnityEngine.Rendering.DebugUI;
 
-public class Manager : MonoBehaviour
+public class UIManager : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        
-    }
+    // --- Singleton ---
+    public static UIManager Instance { get; private set; }
+     
 
     // Update is called once per frame
     void Update()
@@ -23,6 +21,16 @@ public class Manager : MonoBehaviour
 
     void Awake()
     {
+        // Configura el Singleton
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject);
+        }
+        else
+        {
+            Instance = this;
+        }
+
         // Panel oculto desde el principio
         if (startMenuCanvas) startMenuCanvas.SetActive(true);
         if (PlanetMenu) PlanetMenu.SetActive(false);
@@ -32,6 +40,7 @@ public class Manager : MonoBehaviour
     {
         //Debug.Log("Clicked Start");
         if (startMenuCanvas) startMenuCanvas.SetActive(false);
+        GameManager.Instance.ToggleBackgroundBlur();
     }
 
     public void ShowPlanetPanel(bool show = true)

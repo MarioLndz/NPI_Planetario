@@ -80,7 +80,7 @@ public class LeapPlanetSelector : MonoBehaviour
             if (clickable != null)
             {
                 var eventData = new PointerEventData(EventSystem.current);
-                ExecuteEvents.Execute(clickable.gameObject, eventData, ExecuteEvents.pointerClickHandler);
+                clickable.OnPointerClick(eventData);
                 Debug.Log($"🌍 Pinch sobre {hit.collider.name} → Click ejecutado.");
             }
             else
