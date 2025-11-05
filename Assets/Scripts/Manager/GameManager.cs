@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.Rendering;
 
 public class GameManager : MonoBehaviour
@@ -10,6 +10,7 @@ public class GameManager : MonoBehaviour
     private UIManager uiManager;
     [SerializeField] private BlurVolume sceneVolume;
     [SerializeField] private PlanetZoomController cam;
+    [SerializeField] private SwipeGestureDetector swipe;  // <-- NUEVO
 
     void Awake()
     {
@@ -26,8 +27,27 @@ public class GameManager : MonoBehaviour
 
         if (cam != null)
         {
-            cam.OnZoomCompleted -= HandleZoomCompleted; // evita doble suscripci�n
+            cam.OnZoomCompleted -= HandleZoomCompleted; // evita doble suscripción
             cam.OnZoomCompleted += HandleZoomCompleted;
+        }
+    }
+
+    void OnEnable()
+    {
+        // <<< AÑADIR SUSCRIPCIÓN >>>
+        if (swipe != null)
+        {
+            swipe.OnSwipeRight += HandleSwipeRight;
+            swipe.OnSwipeLeft += HandleSwipeLeft;
+        }
+    }
+
+    void OnDisable()
+    {
+        if (swipe != null)
+        {
+            swipe.OnSwipeRight -= HandleSwipeRight;
+            swipe.OnSwipeLeft -= HandleSwipeLeft;
         }
     }
 
@@ -57,7 +77,7 @@ public class GameManager : MonoBehaviour
     {
         if (zoomIn)
         {
-            // Mostrar panel del planeta ACTUAL que est� como target en la c�mara
+            // Mostrar panel del planeta ACTUAL que está como target en la cámara
             var planet = cam.currentTarget;
             if (planet != null)
             {
@@ -66,6 +86,20 @@ public class GameManager : MonoBehaviour
                 uiManager.ShowPlanetPanel(true);
             }
         }
+    }
+
+    // --------- Swipe handlers ----------
+    private void HandleSwipeRight(Leap.Hand _)
+    {
+        // Sólo si hay un planeta seleccionado
+        if (cam != null && cam.currentTarget != null)
+            cam.SelectNeighbor(+1); // derecha → siguiente
+    }
+
+    private void HandleSwipeLeft(Leap.Hand _)
+    {
+        if (cam != null && cam.currentTarget != null)
+            cam.SelectNeighbor(-1); // izquierda → anterior
     }
 
 }
