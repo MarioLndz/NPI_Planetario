@@ -17,16 +17,12 @@ public class UIManager : MonoBehaviour
     // Control interno: una corrutina por panel para no solapar fades
     private readonly Dictionary<GameObject, Coroutine> _runningFades = new();
 
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
 
     public GameObject startMenuCanvas;
     public GameObject PlanetMenu;
 
     public TMP_Text planetTitle;
+    public TMP_Text planetDescription;
 
     void Awake()
     {
@@ -48,8 +44,8 @@ public class UIManager : MonoBehaviour
     public void ClickedStart()
     {
         //Debug.Log("Clicked Start");
-        if (startMenuCanvas) startMenuCanvas.SetActive(false);
-        GameManager.Instance.ToggleBackgroundBlur();
+        if (startMenuCanvas) ShowPanelFade(startMenuCanvas, false);
+        GameManager.Instance.StartVisit();
     }
 
     // --------- NUEVO: método genérico con fade ----------
@@ -146,5 +142,10 @@ public class UIManager : MonoBehaviour
     public void SetPlanetTitle(string title)
     {
         if (planetTitle) planetTitle.text = title;
+    }
+
+    public void SetPlanetInfo(string info)
+    {
+        if (planetDescription) planetDescription.text = info;
     }
 }

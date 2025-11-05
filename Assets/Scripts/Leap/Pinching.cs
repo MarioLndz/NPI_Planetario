@@ -1,5 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;          // ⟵ para GraphicRaycaster
+using System.Collections.Generic;
 using Leap;
 
 public class LeapPlanetSelector : MonoBehaviour
@@ -9,24 +11,27 @@ public class LeapPlanetSelector : MonoBehaviour
     public Camera mainCamera;
     public RectTransform pointerUI;
 
+    [Header("UI Raycasting")]
+    public Canvas pointerCanvas;
+    public EventSystem eventSys;           // ⟵ opcional: referencia explícita
+
     [Header("Pinch Detection (Strength)")]
     [Range(0f, 1f)] public float pinchOnThreshold = 0.9f;
     [Range(0f, 1f)] public float pinchOffThreshold = 0.7f;
 
-    // --- NUEVA VARIABLE ---
     [Header("Click 'Forgiveness'")]
     [Tooltip("El 'grosor' del rayo en unidades de Unity. Un valor más alto es más fácil de clickar.")]
     public float clickRadius = 0.5f;
-    // --- FIN NUEVA VARIABLE ---
 
     private bool isPinching = false;
     private bool eventSystemChecked = false;
 
     void Start()
     {
-        // ... (Tu código de Start() sigue igual)
         if (leapProvider == null) Debug.LogError("Asigna el LeapServiceProvider en el Inspector.");
         if (mainCamera == null) mainCamera = Camera.main;
+
+        // EventSystem
         if (EventSystem.current == null)
         {
             Debug.LogError("¡FALTA UN EVENTSYSTEM! Añade uno desde 'UI > Event System'.");
@@ -36,11 +41,12 @@ public class LeapPlanetSelector : MonoBehaviour
         {
             eventSystemChecked = true;
         }
+        if (eventSys == null) eventSys = EventSystem.current;
+
     }
 
     void Update()
     {
-        // ... (Tu código de Update() sigue igual)
         Frame frame = leapProvider.CurrentFrame;
         if (frame == null || frame.Hands.Count == 0)
         {
@@ -49,10 +55,10 @@ public class LeapPlanetSelector : MonoBehaviour
         }
         Hand hand = frame.Hands.Find(h => h.IsRight) ?? frame.Hands[0];
         float currentPinchStrength = hand.PinchStrength;
+
         if (currentPinchStrength > pinchOnThreshold && !isPinching)
         {
             isPinching = true;
-            Debug.Log($"PINCH ON (Fuerza: {currentPinchStrength})");
             TrySelectPlanet();
         }
         else if (currentPinchStrength < pinchOffThreshold && isPinching)
@@ -67,15 +73,47 @@ public class LeapPlanetSelector : MonoBehaviour
         if (mainCamera == null || pointerUI == null) return;
 
         Vector3 screenPos = pointerUI.position;
+
+        // ---------- 1) RAYCAST DE UI (TODOS LOS CANVAS) ----------
+        var ped = new PointerEventData(EventSystem.current)
+        {
+            position = screenPos,
+            button = PointerEventData.InputButton.Left,
+            clickCount = 1
+        };
+
+        var results = new List<RaycastResult>();
+        EventSystem.current.RaycastAll(ped, results); // ← consulta a TODOS los BaseRaycasters
+
+        for (int i = 0; i < results.Count; i++)
+        {
+            var rr = results[i];
+
+            // Ignorar elementos del pointerCanvas (si se ha asignado)
+            if (pointerCanvas != null && rr.gameObject != null)
+            {
+                if (rr.gameObject.transform.IsChildOf(pointerCanvas.transform))
+                    continue;
+            }
+
+            // Sube al primer ancestro que implemente IPointerClickHandler (p.ej. Button)
+            GameObject handlerGo = ExecuteEvents.GetEventHandler<IPointerClickHandler>(rr.gameObject);
+            if (handlerGo != null)
+            {
+                // (Opcional) simular down/up para plena compatibilidad con Selectable
+                ExecuteEvents.Execute(handlerGo, ped, ExecuteEvents.pointerDownHandler);
+                ExecuteEvents.Execute(handlerGo, ped, ExecuteEvents.pointerUpHandler);
+                ExecuteEvents.Execute(handlerGo, ped, ExecuteEvents.pointerClickHandler);
+
+                Debug.Log($"🖱️ Pinch UI → Click en {handlerGo.name} (hit: {rr.gameObject.name})");
+                return; // ya clicamos UI; no seguimos con 3D
+            }
+        }
+
+        // ---------- 2) FÍSICAS 3D (planetas) ----------
         Ray ray = mainCamera.ScreenPointToRay(screenPos);
-
-        // --- LÍNEA MODIFICADA ---
-        // Cambiamos Physics.Raycast por Physics.SphereCast
-
         if (Physics.SphereCast(ray, clickRadius, out RaycastHit hit, 1000f))
         {
-            // --- FIN LÍNEA MODIFICADA ---
-
             var clickable = hit.collider.GetComponent<PlanetClickable>();
             if (clickable != null)
             {
@@ -85,7 +123,7 @@ public class LeapPlanetSelector : MonoBehaviour
             }
             else
             {
-                Debug.Log($"Pinch sobre {hit.collider.name}, pero no tiene el script 'PlanetClickable'.");
+                Debug.Log($"Pinch sobre {hit.collider.name}, pero no tiene 'PlanetClickable'.");
             }
         }
         else

@@ -457,7 +457,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3726076447105019135, guid: 749d7dff0ab299b48b4c310dc14f400d, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 66
+      value: 68
       objectReference: {fileID: 0}
     - target: {fileID: 3726076447105019135, guid: 749d7dff0ab299b48b4c310dc14f400d, type: 3}
       propertyPath: m_LocalRotation.w
@@ -493,7 +493,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6515517470081391322, guid: 749d7dff0ab299b48b4c310dc14f400d, type: 3}
       propertyPath: m_Radius
-      value: 0.9
+      value: 1.35
       objectReference: {fileID: 0}
     - target: {fileID: 7097812754834105507, guid: 749d7dff0ab299b48b4c310dc14f400d, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
@@ -872,7 +872,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &416269377
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1234,7 +1234,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshProUGUI
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -1358,6 +1358,147 @@ Transform:
   - {fileID: 272378908}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &490550357
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 490550358}
+  - component: {fileID: 490550360}
+  - component: {fileID: 490550359}
+  m_Layer: 5
+  m_Name: Info
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &490550358
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 490550357}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 549497718}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: -380}
+  m_SizeDelta: {x: 875, y: 900}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &490550359
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 490550357}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshProUGUI
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 0
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_text: "Datos sobre Mercurio\n\nDi\xE1metro: 4.879 km (0,38 Tierras).\n\n\xC1rea
+    superficial: 74,8 millones de kil\xF3metros cuadrados (0,147 Tierras).\n\nGravedad:
+    3,7 m/s2 (38 % de la gravedad de la Tierra).\n\nMasa: 3,3 x 1023 kg (0,055 Tierras).\n\nDensidad:
+    5.430 kg/m3 (Tierra: 5.515 kg/m3).\n\nDistancia al Sol: 46.001.200 \u2013 69.816.900
+    km (Tierra: 149.597.900 km).\n\nIrradiancia solar: 6.272 \u2013 14.448 W/m\xB2
+    (Tierra:\_1.366\_W/m\xB2)."
+  m_isRightToLeft: 0
+  m_fontAsset: {fileID: 11400000, guid: 342802517badcf44c811584e5b42a888, type: 2}
+  m_sharedMaterial: {fileID: 556829042121458119, guid: 342802517badcf44c811584e5b42a888, type: 2}
+  m_fontSharedMaterials: []
+  m_fontMaterial: {fileID: 0}
+  m_fontMaterials: []
+  m_fontColor32:
+    serializedVersion: 2
+    rgba: 4278190080
+  m_fontColor: {r: 0, g: 0, b: 0, a: 1}
+  m_enableVertexGradient: 0
+  m_colorMode: 3
+  m_fontColorGradient:
+    topLeft: {r: 1, g: 1, b: 1, a: 1}
+    topRight: {r: 1, g: 1, b: 1, a: 1}
+    bottomLeft: {r: 1, g: 1, b: 1, a: 1}
+    bottomRight: {r: 1, g: 1, b: 1, a: 1}
+  m_fontColorGradientPreset: {fileID: 0}
+  m_spriteAsset: {fileID: 0}
+  m_tintAllSprites: 0
+  m_StyleSheet: {fileID: 0}
+  m_TextStyleHashCode: -1183493901
+  m_overrideHtmlColors: 0
+  m_faceColor:
+    serializedVersion: 2
+    rgba: 4294967295
+  m_fontSize: 37.9
+  m_fontSizeBase: 40
+  m_fontWeight: 400
+  m_enableAutoSizing: 1
+  m_fontSizeMin: 18
+  m_fontSizeMax: 50
+  m_fontStyle: 0
+  m_HorizontalAlignment: 1
+  m_VerticalAlignment: 256
+  m_textAlignment: 65535
+  m_characterSpacing: 0
+  m_wordSpacing: 0
+  m_lineSpacing: 0
+  m_lineSpacingMax: 0
+  m_paragraphSpacing: 0
+  m_charWidthMaxAdj: 0
+  m_TextWrappingMode: 1
+  m_wordWrappingRatios: 0.4
+  m_overflowMode: 0
+  m_linkedTextComponent: {fileID: 0}
+  parentLinkedComponent: {fileID: 0}
+  m_enableKerning: 0
+  m_ActiveFontFeatures: 6e72656b
+  m_enableExtraPadding: 0
+  checkPaddingRequired: 0
+  m_isRichText: 1
+  m_EmojiFallbackSupport: 1
+  m_parseCtrlCharacters: 1
+  m_isOrthographic: 1
+  m_isCullingEnabled: 0
+  m_horizontalMapping: 0
+  m_verticalMapping: 0
+  m_uvLineOffset: 0
+  m_geometrySortingOrder: 0
+  m_IsTextObjectScaleStatic: 0
+  m_VertexBufferAutoSizeReduction: 0
+  m_useMaxVisibleDescender: 1
+  m_pageToDisplay: 1
+  m_margin: {x: 0, y: 0, z: 0, w: 0}
+  m_isUsingLegacyAnimationComponent: 0
+  m_isVolumetricText: 0
+  m_hasFontAssetChanged: 0
+  m_baseMaterial: {fileID: 0}
+  m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!222 &490550360
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 490550357}
+  m_CullTransparentMesh: 1
 --- !u!1001 &501511533
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1465,7 +1606,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &549497718
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1480,6 +1621,7 @@ RectTransform:
   m_Children:
   - {fileID: 1569566822}
   - {fileID: 418469110}
+  - {fileID: 490550358}
   m_Father: {fileID: 629954082}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -1584,9 +1726,9 @@ RectTransform:
   - {fileID: 440699841}
   m_Father: {fileID: 1275450118}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 340, y: -291.43494}
   m_SizeDelta: {x: 160, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &612857978
@@ -1865,6 +2007,7 @@ MonoBehaviour:
   startMenuCanvas: {fileID: 416269376}
   PlanetMenu: {fileID: 549497717}
   planetTitle: {fileID: 418469111}
+  planetDescription: {fileID: 490550359}
 --- !u!114 &737368766 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 11435192, guid: b9c7aaf0d314cb847a3b2a20e893f1b6, type: 3}
@@ -2062,7 +2205,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1228643002
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2643,6 +2786,8 @@ MonoBehaviour:
   leapProvider: {fileID: 737368766}
   mainCamera: {fileID: 330585545}
   pointerUI: {fileID: 1428125876}
+  pointerCanvas: {fileID: 1228643005}
+  eventSys: {fileID: 1051652137}
   pinchOnThreshold: 0.8
   pinchOffThreshold: 0.7
   clickRadius: 0.5
@@ -2721,6 +2866,55 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1569566821}
   m_CullTransparentMesh: 1
+--- !u!1 &1613934124
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1613934126}
+  - component: {fileID: 1613934125}
+  m_Layer: 0
+  m_Name: PlanetTextCSVLoader
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1613934125
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1613934124}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a89530bd42fa5eb4bb1b98ea5bcc91eb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlanetTextCSVLoader
+  dontDestroyOnLoad: 1
+  csvFile: {fileID: 4900000, guid: 5c7c0af2b3bf66340887115731a0fae5, type: 3}
+  resourcesPath: planet_texts_multi
+  defaultLanguage: SPANISH
+  languages: []
+--- !u!4 &1613934126
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1613934124}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 447.83258, y: 935.19086, z: -20.28528}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1627359483
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2923,7 +3117,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6515517470081391322, guid: 749d7dff0ab299b48b4c310dc14f400d, type: 3}
       propertyPath: m_Radius
-      value: 0.9
+      value: 0.6
       objectReference: {fileID: 0}
     - target: {fileID: 7097812754834105507, guid: 749d7dff0ab299b48b4c310dc14f400d, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
@@ -3127,7 +3321,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6515517470081391322, guid: 749d7dff0ab299b48b4c310dc14f400d, type: 3}
       propertyPath: m_Radius
-      value: 0.9
+      value: 1.3
       objectReference: {fileID: 0}
     - target: {fileID: 7097812754834105507, guid: 749d7dff0ab299b48b4c310dc14f400d, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
@@ -3246,6 +3440,7 @@ SceneRoots:
   - {fileID: 453893502}
   - {fileID: 1566158270}
   - {fileID: 401367035}
-  - {fileID: 1413977530}
   - {fileID: 629954082}
   - {fileID: 693426685}
+  - {fileID: 1613934126}
+  - {fileID: 1413977530}

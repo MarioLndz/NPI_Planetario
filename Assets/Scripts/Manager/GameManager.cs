@@ -8,8 +8,12 @@ public class GameManager : MonoBehaviour
 
     // Fields
     private UIManager uiManager;
+    private PlanetTextCSVLoader textsDB;
+
     [SerializeField] private BlurVolume sceneVolume;
     [SerializeField] private PlanetZoomController cam;
+
+    private GameStates _state;
 
     void Awake()
     {
@@ -34,6 +38,15 @@ public class GameManager : MonoBehaviour
     private void Start()
     {
         uiManager = UIManager.Instance;
+        textsDB = PlanetTextCSVLoader.Instance;
+
+        _state = GameStates.MainPanel;
+    }
+
+    public void StartVisit ()
+    {
+        ToggleBackgroundBlur();
+        _state = GameStates.MainView;
     }
 
     public void ToggleBackgroundBlur ()
@@ -43,13 +56,24 @@ public class GameManager : MonoBehaviour
 
     public void RequestZoom (PlanetClickable planet)
     {
+        if (_state == GameStates.MainPanel)
+        {
+            return;
+        }
+
         // Zoom al planeta
         bool? zoomIn = cam.RequestZoom (planet);
 
         if (zoomIn == false)
         {
             // Zoom out: ocultar panel directamente
+            _state = GameStates.MainView;
             uiManager.ShowPlanetPanel(false);
+        } else {
+            // Zoom in:
+            _state = GameStates.MainView;
+
+            uiManager.SetPlanetInfo(textsDB.GetText("mercurio2", "SPANISH"));
         }
     }
 
