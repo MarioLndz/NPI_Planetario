@@ -6,7 +6,7 @@
 - El museo está inspirado en una nave espacial, y los visitantes forman parte de una tripulación intergaláctica que recorre los distintos planetas.
 
 ### 1.1-Otras ideas
-- Se puede considerar también el implementar varias plantas, en las que se trate de la carrera espacial, mitología de los planetas, origen del universo y una sala de exposición temporal, en el que podríamos empezar hablando de las riquezas que te puede aportar un meteorito (Artículo propuesto por Jaime). Como otra idea para la exposición temporal se podría barajar también la idea de la situación actual de la basura espacial o la contaminación lumínica.
+- Se puede considerar también el implementar varias plantas, en las que se trate de la carrera espacial, mitología de los planetas, origen del universo y una sala de exposición temporal, en el que podríamos empezar hablando de las riquezas que te puede aportar un meteorito (Artículo propuesto por Jaime), el telescopio James Web o el Hubble. Como otra idea para la exposición temporal se podría barajar también la idea de la situación actual de la basura espacial o la contaminación lumínica.
 - Podriamos incorporar la máquina que habló en clase del estilo de Ready Player One para que se pueda implemntar la sensación de como sería andar por los distintos planetas.
 ---
 
