@@ -6,7 +6,7 @@
 - El museo está inspirado en una nave espacial, y los visitantes forman parte de una tripulación intergaláctica que recorre los distintos planetas.
 
 ### 1.1-Otras ideas
-- Se puede considerar también el implementar varias plantas, en las que se trate de la carrera espacial, mitología de los planetas, origen del universo y una sala de exposición temporal, en el que podríamos empezar hablando de las riquezas que te puede aportar un meteorito (Artículo propuesto por Jaime)
+- Se puede considerar también el implementar varias plantas, en las que se trate de la carrera espacial, mitología de los planetas, origen del universo y una sala de exposición temporal, en el que podríamos empezar hablando de las riquezas que te puede aportar un meteorito (Artículo propuesto por Jaime). Como otra idea para la exposición temporal se podría barajar también la idea de la situación actual de la basura espacial o la contaminación lumínica.
 - Podriamos incorporar la máquina que habló en clase del estilo de Ready Player One para que se pueda implemntar la sensación de como sería andar por los distintos planetas.
 ---
 
@@ -21,6 +21,8 @@ Las personas con discapacidad visual podrán solicitar que:
 - Se realizará una maqueta a tamaño proporcional de los planetas, así las personas con discapacidad podrán hacerse una idea de la diferencia de tamaño.
 - Habrá otra maqueta independiente en la que tendrán sistemas de temeperatura incluidos en las que mediante el tacto se podrá reconocer las zonas más frías y calientes, además de la orografía. Además estos planetas podrán ser pulsables de forma que te pueda decir que planetas estas tocando e incluso algún juego modo Memory pero con esta función.
 - También podemos incorporar experiencias respecto al tacto, como simulaciones de materiales que componen los planetas o experiencias de tocar la tela de un traje espacial
+- En la zona de Marte habrá una experiencia inmersiva en donde podrás sentir una tormeta de arena mediante cañones de aire, sonido ambiental y una pantalla que simulará la dismunción de la visibilidad.
+- Mediante "Walkie Talkie" y unos sensores de posición se puede detectar la ubicación de una persona ciega y orientarla por el recorrido a la vez que decirle que elemento se encuentrar en su entorno.
   
 
 ### 2.2-Auditiva

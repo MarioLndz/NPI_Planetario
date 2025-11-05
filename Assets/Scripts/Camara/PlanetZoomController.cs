@@ -1,12 +1,13 @@
-using UnityEngine;
+Ôªøusing System; // <-- para Action
 using System.Collections;
-using System; // <-- para Action
+using System.Collections.Generic;
+using UnityEngine;
 
 // Pon este script en tu objeto Main Camera
 public class PlanetZoomController : MonoBehaviour
 {
-    [Header("ConfiguraciÛn de Zoom")]
-    public float zoomDuration = 1.5f; // DuraciÛn global del zoom
+    [Header("Configuraci√≥n de Zoom")]
+    public float zoomDuration = 1.5f; // Duraci√≥n global del zoom
 
     private Camera cam;
     private Vector3 defaultCamPos;
@@ -16,14 +17,15 @@ public class PlanetZoomController : MonoBehaviour
     public PlanetClickable currentTarget;
 
     public event Action<bool> OnZoomCompleted; // true = zoom in, false = zoom out
-    private bool lastZoomIn;                   // recordamos quÈ acciÛn estamos haciendo
+    private bool lastZoomIn;                   // recordamos qu√© acci√≥n estamos haciendo
 
-
-
+    [Header("Planets (izq ‚Üí der)")]
+    public List<PlanetClickable> planets = new();
+   
     void Start()
     {
-        // Se asume que este script est· en la c·mara, pero
-        // Camera.main la encontrar· de todas formas.
+        // Se asume que este script est√° en la c√°mara, pero
+        // Camera.main la encontrar√° de todas formas.
         cam = Camera.main;
         if (cam != null)
         {
@@ -33,7 +35,7 @@ public class PlanetZoomController : MonoBehaviour
     }
 
     /// <summary>
-    /// El planeta llama a esta funciÛn para solicitar un zoom.
+    /// El planeta llama a esta funci√≥n para solicitar un zoom.
     /// </summary>
     public bool? RequestZoom(PlanetClickable planet)
     {
@@ -75,8 +77,31 @@ public class PlanetZoomController : MonoBehaviour
         }
     }
 
+    public void SelectNeighbor(int dir, bool wrap = false)
+    {
+        if (currentTarget == null || planets == null || planets.Count == 0 || isZooming) return;
+
+        int i = planets.IndexOf(currentTarget);
+        if (i < 0) return;
+
+        int next = i + dir;
+
+        if (wrap)
+        {
+            if (next < 0) next = planets.Count - 1;
+            if (next >= planets.Count) next = 0;
+        }
+        else
+        {
+            next = Mathf.Clamp(next, 0, planets.Count - 1);
+            if (next == i) return; // ya est√°s en el extremo
+        }
+
+        RequestZoom(planets[next]); // Zoom al vecino; GameManager actualizar√° la UI en OnZoomCompleted
+    }
+
     /// <summary>
-    /// Corrutina genÈrica para mover la c·mara
+    /// Corrutina gen√©rica para mover la c√°mara
     /// </summary>
     private IEnumerator MoveCamera(Vector3 targetPos, Quaternion targetRot)
     {
@@ -104,5 +129,6 @@ public class PlanetZoomController : MonoBehaviour
 
         OnZoomCompleted?.Invoke(lastZoomIn);
     }
+
 
 }
