@@ -91,15 +91,12 @@ public class GameManager : MonoBehaviour
     // --------- Swipe handlers ----------
     private void HandleSwipeRight(Leap.Hand _)
     {
-        // Sólo si hay un planeta seleccionado
-        if (cam != null && cam.currentTarget != null)
-            cam.SelectNeighbor(+1); // derecha → siguiente
+        if (cam && cam.currentTarget) cam.SelectNeighbor(+1, wrap: true);
     }
-
     private void HandleSwipeLeft(Leap.Hand _)
     {
-        if (cam != null && cam.currentTarget != null)
-            cam.SelectNeighbor(-1); // izquierda → anterior
+        if (cam && cam.currentTarget) cam.SelectNeighbor(-1, wrap: true);
     }
+
 
 }
