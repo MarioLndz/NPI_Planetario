@@ -16,8 +16,6 @@ public class SwipeGestureDetector : MonoBehaviour
 
     // Eventos públicos
     public delegate void SwipeAction(Hand hand);
-    public event SwipeAction OnSwipeLeft;
-    public event SwipeAction OnSwipeRight;
 
     void Update()
     {
@@ -48,12 +46,12 @@ public class SwipeGestureDetector : MonoBehaviour
         {
             if (vx > 0)
             {
-                OnSwipeRight?.Invoke(hand);
+                GameManager.Instance.HandleSwipeLeft(hand);
                 Debug.Log("➡️ Swipe a la derecha detectado");
             }
             else
             {
-                OnSwipeLeft?.Invoke(hand);
+                GameManager.Instance.HandleSwipeRight(hand);
                 Debug.Log("⬅️ Swipe a la izquierda detectado");
             }
 

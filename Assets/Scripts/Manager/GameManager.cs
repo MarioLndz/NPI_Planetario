@@ -1,10 +1,12 @@
 ﻿using UnityEngine;
 using UnityEngine.Rendering;
 
+public enum GameMode { Kid, Normal, Expert }
 public class GameManager : MonoBehaviour
 {
     // --- Singleton ---
     public static GameManager Instance { get; private set; }
+    public GameMode CurrentMode { get; private set; } = GameMode.Normal;
 
     // Fields
     private UIManager uiManager;
@@ -12,7 +14,6 @@ public class GameManager : MonoBehaviour
 
     [SerializeField] private BlurVolume sceneVolume;
     [SerializeField] private PlanetZoomController cam;
-    [SerializeField] private SwipeGestureDetector swipe;  // <-- NUEVO
 
     private GameStates _state;
 
@@ -36,24 +37,17 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    void OnEnable()
+    public void SetMode(GameMode mode)
     {
-        // <<< AÑADIR SUSCRIPCIÓN >>>
-        if (swipe != null)
-        {
-            swipe.OnSwipeRight += HandleSwipeRight;
-            swipe.OnSwipeLeft += HandleSwipeLeft;
-        }
-    }
+        if (CurrentMode == mode) return;
+        CurrentMode = mode;
+        Debug.Log($"Modo cambiado a: {mode}");
 
-    void OnDisable()
-    {
-        if (swipe != null)
-        {
-            swipe.OnSwipeRight -= HandleSwipeRight;
-            swipe.OnSwipeLeft -= HandleSwipeLeft;
-        }
+        // Aquí activa la versión del juego:
+        // UIManager.Instance.ShowBanner(mode);
+        // Cargar perfil de dificultad, etc.
     }
+    
 
     private void Start()
     {
@@ -113,11 +107,11 @@ public class GameManager : MonoBehaviour
     }
 
     // --------- Swipe handlers ----------
-    private void HandleSwipeRight(Leap.Hand _)
+    public void HandleSwipeRight(Leap.Hand _)
     {
         if (cam && cam.currentTarget) cam.SelectNeighbor(+1, wrap: true);
     }
-    private void HandleSwipeLeft(Leap.Hand _)
+    public void HandleSwipeLeft(Leap.Hand _)
     {
         if (cam && cam.currentTarget) cam.SelectNeighbor(-1, wrap: true);
     }
