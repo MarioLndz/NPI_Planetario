@@ -3,6 +3,15 @@ using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
 
+public enum Language
+{
+    Spanish = 0,
+    English = 1,
+    French = 2,
+    German = 3
+    // añade más si los usas
+}
+
 public class PlanetTextCSVLoader : MonoBehaviour
 {
     // ---------- Singleton ----------
@@ -12,19 +21,20 @@ public class PlanetTextCSVLoader : MonoBehaviour
 
     // ---------- Config ----------
     [Header("Fuente de datos (usa UNO de los dos)")]
-    public TextAsset csvFile;                         // Arrástralo aquí
+    public TextAsset csvFile;                           // Arrástralo aquí
     public string resourcesPath = "planet_texts_multi"; // O pon el CSV en Resources/planet_texts_multi.csv
 
-    [Header("Idioma por defecto (debe coincidir con la cabecera)")]
-    public string defaultLanguage = "SPANISH";
+    [Header("Idioma por defecto")]
+    public Language currentLanguage;
+    private Language defaultLanguage = Language.Spanish;
 
     // ---------- Datos ----------
-    // id -> (lang -> text)
-    public Dictionary<string, Dictionary<string, string>> db
-        = new Dictionary<string, Dictionary<string, string>>(StringComparer.OrdinalIgnoreCase);
+    // id -> (Language -> text)
+    public Dictionary<string, Dictionary<Language, string>> db
+        = new Dictionary<string, Dictionary<Language, string>>(StringComparer.OrdinalIgnoreCase);
 
     // Idiomas detectados en cabecera (en orden)
-    public List<string> languages = new List<string>();
+    public List<Language> languages = new List<Language>();
 
     void Awake()
     {
@@ -32,32 +42,60 @@ public class PlanetTextCSVLoader : MonoBehaviour
         Instance = this;
         if (dontDestroyOnLoad) DontDestroyOnLoad(gameObject);
         Load();
+
+        currentLanguage = defaultLanguage;
     }
 
     // ---------- API ----------
     public static string SGet(string id) => Instance ? Instance.GetText(id) : id;
+    public static string SGet(string id, Language lang) => Instance ? Instance.GetText(id, lang) : id;
+
+    [Obsolete("Usa SGet(id, Language)")]
     public static string SGet(string id, string lang) => Instance ? Instance.GetText(id, lang) : id;
 
-    public string GetText(string id) => GetText(id, defaultLanguage);
+    public string GetText(string id) => GetText(id, currentLanguage);
 
-    public string GetText(string id, string language)
+    public string GetInfo(PlanetClickable planet, int page)
+    {
+        string info_id = planet.GetId() + "_info_" + page;
+        return GetText(info_id);
+    }
+
+    public string GetNombre(PlanetClickable p)
+    {
+        string nombre_id = p.GetId() + "_nombre";
+        return GetText(nombre_id);
+    }
+
+    public string GetText(string id, Language language)
     {
         if (string.IsNullOrEmpty(id)) return "";
         if (!db.TryGetValue(id, out var perLang) || perLang == null || perLang.Count == 0) return id;
 
         // 1) idioma pedido
-        if (!string.IsNullOrEmpty(language) &&
-            perLang.TryGetValue(language, out var t) && !string.IsNullOrEmpty(t)) return t;
+        if (perLang.TryGetValue(language, out var t) && !string.IsNullOrEmpty(t)) return t;
 
         // 2) idioma por defecto
-        if (!string.IsNullOrEmpty(defaultLanguage) &&
-            perLang.TryGetValue(defaultLanguage, out var td) && !string.IsNullOrEmpty(td)) return td;
+        if (perLang.TryGetValue(defaultLanguage, out var td) && !string.IsNullOrEmpty(td)) return td;
 
-        // 3) primer idioma disponible
+        // 3) primer idioma disponible según cabecera
         foreach (var lang in languages)
             if (perLang.TryGetValue(lang, out var any) && !string.IsNullOrEmpty(any)) return any;
 
         return id;
+    }
+
+    // Compatibilidad con código antiguo que pasa string
+    public string GetText(string id, string language)
+    {
+        if (TryParseLanguage(language, out var lang))
+            return GetText(id, lang);
+        return GetText(id); // fallback
+    }
+
+    public void setLanguage(Language new_language)
+    {
+        currentLanguage = new_language;
     }
 
     [ContextMenu("Reload CSV")]
@@ -102,10 +140,20 @@ public class PlanetTextCSVLoader : MonoBehaviour
         if (!header[0].Equals("ID", StringComparison.OrdinalIgnoreCase))
             Debug.LogWarning($"[PlanetTextCSVLoader] Primera columna no es 'ID' sino '{header[0]}'. Se usará igualmente.");
 
+        // Mapea columnas a enum Language
+        var colToLang = new Dictionary<int, Language>();
         for (int c = 1; c < header.Count; c++)
         {
-            var lang = header[c]?.Trim();
-            if (!string.IsNullOrEmpty(lang)) languages.Add(lang);
+            var raw = header[c]?.Trim();
+            if (TryParseLanguage(raw, out var lang))
+            {
+                colToLang[c] = lang;
+                if (!languages.Contains(lang)) languages.Add(lang);
+            }
+            else
+            {
+                Debug.LogWarning($"[PlanetTextCSVLoader] Columna de idioma desconocida '{raw}' ignorada.");
+            }
         }
 
         while (i < csv.Length)
@@ -116,10 +164,11 @@ public class PlanetTextCSVLoader : MonoBehaviour
             string id = row.Count > 0 ? row[0]?.Trim() : null;
             if (string.IsNullOrEmpty(id)) continue;
 
-            var perLang = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
-            for (int c = 1; c < header.Count; c++)
+            var perLang = new Dictionary<Language, string>();
+            foreach (var kv in colToLang)
             {
-                string lang = header[c];
+                int c = kv.Key;
+                var lang = kv.Value;
                 string val = (c < row.Count) ? row[c] : "";
                 perLang[lang] = val;
             }
@@ -158,5 +207,41 @@ public class PlanetTextCSVLoader : MonoBehaviour
         }
         fields.Add(sb.ToString());
         return fields;
+    }
+
+    // --------- Helpers idioma ---------
+    public static bool TryParseLanguage(string s, out Language lang)
+    {
+        lang = default;
+        if (string.IsNullOrWhiteSpace(s)) return false;
+
+        // Normaliza
+        s = s.Trim();
+
+        // Aliases comunes
+        switch (s.ToUpperInvariant())
+        {
+            case "ES":
+            case "ES-ES":
+            case "SPANISH":
+            case "CASTILIAN":
+                lang = Language.Spanish; return true;
+            case "EN":
+            case "EN-GB":
+            case "EN-US":
+            case "ENGLISH":
+                lang = Language.English; return true;
+            case "FR":
+            case "FR-FR":
+            case "FRENCH":
+                lang = Language.French; return true;
+            case "DE":
+            case "DE-DE":
+            case "GERMAN":
+                lang = Language.German; return true;
+        }
+
+        // Fallback: usa nombres del enum (case-insensitive)
+        return Enum.TryParse(s, true, out lang);
     }
 }

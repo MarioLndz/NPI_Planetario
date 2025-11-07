@@ -18,7 +18,11 @@ public class UIManager : MonoBehaviour
     private readonly Dictionary<GameObject, Coroutine> _runningFades = new();
 
 
+    [Header("------ Start Menu ------")]
     public GameObject startMenuCanvas;
+    public TMP_Text startButtonText;
+
+    [Header("------ Planet Elements ------")]
     public GameObject PlanetMenu;
 
     public TMP_Text planetTitle;
@@ -147,5 +151,33 @@ public class UIManager : MonoBehaviour
     public void SetPlanetInfo(string info)
     {
         if (planetDescription) planetDescription.text = info;
+    }
+
+    public void changeLanguage(string newLanguage)
+    {
+        Language lan;
+        
+        if (PlanetTextCSVLoader.TryParseLanguage(newLanguage, out lan))
+        {
+            PlanetTextCSVLoader.Instance.setLanguage(lan);
+            refreshUI();
+        }
+    }
+
+    public void refreshUI ()
+    {
+        if (GameManager.Instance.GetState() == GameStates.MainPanel) {
+            startButtonText.text = PlanetTextCSVLoader.Instance.GetText("start_button");
+            return;
+        }
+
+        if (GameManager.Instance.GetCurrentTarget() == null) return;
+
+        // Si hay un target, actualizamos los textos
+        PlanetClickable p = GameManager.Instance.GetCurrentTarget();
+        SetPlanetInfo(PlanetTextCSVLoader.Instance.GetInfo(p, 0));
+        SetPlanetTitle(PlanetTextCSVLoader.Instance.GetNombre(p));
+
+        
     }
 }

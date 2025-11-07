@@ -1,3 +1,18 @@
 ID;SPANISH;ENGLISH
-mercurio1;Hola;PRUEBA INGLES
-mercurio2;Adios;Bye
+mercurio_info_0;INFO DE MERCURIO;MERCURY'S INFO
+venus_info_0;INFO DE VENUS;VENUS' INFO
+tierra_info_0;INFO DE TIERRA;EARTH'S INFO
+marte_info_0;INFO DE MARTE;MARTH'S INFO
+jupiter_info_0;INFO DE JUPITER;JUPYTER'S INFO
+saturno_info_0;INFO DE SATURNO;SATURN'S INFO
+urano_info_0;INFO DE URANO;URANUS' INFO
+neptuno_info_0;INFO DE NEPTUNO;NEPTUNE INFO
+mercurio_nombre;Mercurio;Mercury
+venus_nombre;Venus;Venus
+tierra_nombre;Tierra;Earth
+marte_nombre;Marte;Marth
+jupiter_nombre;Júpiter;Jupyter
+saturno_nombre;Saturno;Saturn
+urano_nombre;Urano;Uranus
+neptuno_nombre;Neptuno;Neptune
+start_button;Comenzar visita;Start Visit

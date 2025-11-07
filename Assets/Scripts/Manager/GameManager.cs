@@ -37,6 +37,15 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    public PlanetClickable GetCurrentTarget()
+    {
+        return cam.currentTarget;
+    }
+
+    public GameStates GetState ()
+    {
+        return _state;
+    }
     public void SetMode(GameMode mode)
     {
         if (CurrentMode == mode) return;
@@ -87,7 +96,8 @@ public class GameManager : MonoBehaviour
             // Zoom in:
             _state = GameStates.MainView;
 
-            uiManager.SetPlanetInfo(textsDB.GetText("mercurio2", "SPANISH"));
+            uiManager.SetPlanetTitle(textsDB.GetNombre(planet));
+            uiManager.SetPlanetInfo(textsDB.GetInfo(planet, 0));
         }
     }
 
@@ -99,8 +109,6 @@ public class GameManager : MonoBehaviour
             var planet = cam.currentTarget;
             if (planet != null)
             {
-                string title = string.IsNullOrWhiteSpace(planet.displayName) ? planet.gameObject.name : planet.displayName;
-                uiManager.SetPlanetTitle(title);
                 uiManager.ShowPlanetPanel(true);
             }
         }
