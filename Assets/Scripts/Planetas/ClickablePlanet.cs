@@ -8,6 +8,8 @@ public class PlanetClickable : MonoBehaviour, IPointerClickHandler
     public float zoomDistance = 5f;
     public string displayName;
 
+    [SerializeField] private string _id_planeta;
+
 
     /// <summary>
     /// Se llama cuando se hace clic en este objeto.
@@ -24,5 +26,10 @@ public class PlanetClickable : MonoBehaviour, IPointerClickHandler
         // 2. Le pide al controlador que haga zoom, pasándole
         //    una referencia a este mismo script de planeta.
         GameManager.Instance.RequestZoom(this);
+    }
+
+    public string GetId ()
+    {
+        return _id_planeta;
     }
 }

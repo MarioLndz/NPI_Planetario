@@ -127,6 +127,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 453893502}
     m_Modifications:
+    - target: {fileID: -484665336064714313, guid: 749d7dff0ab299b48b4c310dc14f400d, type: 3}
+      propertyPath: _id_planeta
+      value: urano
+      objectReference: {fileID: 0}
     - target: {fileID: 3726076447105019135, guid: 749d7dff0ab299b48b4c310dc14f400d, type: 3}
       propertyPath: m_LocalScale.x
       value: 25
@@ -349,6 +353,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 453893502}
     m_Modifications:
+    - target: {fileID: -484665336064714313, guid: 749d7dff0ab299b48b4c310dc14f400d, type: 3}
+      propertyPath: _id_planeta
+      value: neptuno
+      objectReference: {fileID: 0}
     - target: {fileID: 3726076447105019135, guid: 749d7dff0ab299b48b4c310dc14f400d, type: 3}
       propertyPath: m_LocalScale.x
       value: 25
@@ -446,6 +454,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 453893502}
     m_Modifications:
+    - target: {fileID: -484665336064714313, guid: 749d7dff0ab299b48b4c310dc14f400d, type: 3}
+      propertyPath: _id_planeta
+      value: marte
+      objectReference: {fileID: 0}
     - target: {fileID: 3726076447105019135, guid: 749d7dff0ab299b48b4c310dc14f400d, type: 3}
       propertyPath: m_LocalScale.x
       value: 8.31
@@ -1527,6 +1539,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 453893502}
     m_Modifications:
+    - target: {fileID: -484665336064714313, guid: 749d7dff0ab299b48b4c310dc14f400d, type: 3}
+      propertyPath: _id_planeta
+      value: saturno
+      objectReference: {fileID: 0}
     - target: {fileID: 3726076447105019135, guid: 749d7dff0ab299b48b4c310dc14f400d, type: 3}
       propertyPath: m_LocalScale.x
       value: 40
@@ -2339,6 +2355,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 453893502}
     m_Modifications:
+    - target: {fileID: -484665336064714313, guid: 749d7dff0ab299b48b4c310dc14f400d, type: 3}
+      propertyPath: _id_planeta
+      value: venus
+      objectReference: {fileID: 0}
     - target: {fileID: 3726076447105019135, guid: 749d7dff0ab299b48b4c310dc14f400d, type: 3}
       propertyPath: m_LocalScale.x
       value: 9.92
@@ -2440,7 +2460,7 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1275450117}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 200}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -3108,6 +3128,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 453893502}
     m_Modifications:
+    - target: {fileID: -484665336064714313, guid: 749d7dff0ab299b48b4c310dc14f400d, type: 3}
+      propertyPath: _id_planeta
+      value: jupiter
+      objectReference: {fileID: 0}
     - target: {fileID: 3726076447105019135, guid: 749d7dff0ab299b48b4c310dc14f400d, type: 3}
       propertyPath: m_LocalScale.x
       value: 40
@@ -3349,6 +3373,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 453893502}
     m_Modifications:
+    - target: {fileID: -484665336064714313, guid: 749d7dff0ab299b48b4c310dc14f400d, type: 3}
+      propertyPath: _id_planeta
+      value: mercurio
+      objectReference: {fileID: 0}
     - target: {fileID: 3726076447105019135, guid: 749d7dff0ab299b48b4c310dc14f400d, type: 3}
       propertyPath: m_LocalScale.x
       value: 6.5
@@ -3496,6 +3524,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1396758681}
     m_Modifications:
+    - target: {fileID: -484665336064714313, guid: 749d7dff0ab299b48b4c310dc14f400d, type: 3}
+      propertyPath: _id_planeta
+      value: tierra
+      objectReference: {fileID: 0}
     - target: {fileID: 3726076447105019135, guid: 749d7dff0ab299b48b4c310dc14f400d, type: 3}
       propertyPath: m_LocalScale.x
       value: 10.439999
