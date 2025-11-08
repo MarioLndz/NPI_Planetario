@@ -43,6 +43,7 @@ public class UIManager : MonoBehaviour
         // Panel oculto desde el principio
         if (startMenuCanvas) startMenuCanvas.SetActive(true);
         if (PlanetMenu) PlanetMenu.SetActive(false);
+
     }
 
     public void ClickedStart()

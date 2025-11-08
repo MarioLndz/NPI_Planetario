@@ -35,6 +35,8 @@ public class GameManager : MonoBehaviour
             cam.OnZoomCompleted -= HandleZoomCompleted; // evita doble suscripción
             cam.OnZoomCompleted += HandleZoomCompleted;
         }
+
+        
     }
 
     public PlanetClickable GetCurrentTarget()
@@ -64,6 +66,8 @@ public class GameManager : MonoBehaviour
         textsDB = PlanetTextCSVLoader.Instance;
 
         _state = GameStates.MainPanel;
+
+        uiManager.refreshUI();
     }
 
     public void StartVisit ()
