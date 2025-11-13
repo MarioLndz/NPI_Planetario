@@ -23,8 +23,6 @@ public class LeapMousePointer : MonoBehaviour
     private Vector3 neutralTip;
     private Vector3 smoothedTip;
 
-    // private Vector3 lastPointerPosition; // Ya no necesitamos esta variable
-
     // --- NUEVO MÉTODO Start() ---
     void Start()
     {
@@ -47,18 +45,24 @@ public class LeapMousePointer : MonoBehaviour
     {
         Frame frame = leapProvider.CurrentFrame;
 
-        // Comprobamos si hay manos
-        if (frame.Hands.Count > 0)
+        // Buscar solo la mano derecha
+        Hand hand = null;
+        if (frame != null)
         {
-            // --- MANO DETECTADA ---
+            hand = frame.Hands.Find(h => h.IsRight);  // ⬅️ SOLO MANO DERECHA
+        }
+
+        // Comprobamos si hay mano derecha
+        if (hand != null)
+        {
+            // --- MANO DERECHA DETECTADA ---
 
             // 1. Resetear el temporizador y asegurar que es visible
             handLostTimer = 0.0f;
             pointerUI.gameObject.SetActive(true);
             pointerCanvasGroup.alpha = 1.0f;
 
-            // 2. Tomar toda tu lógica de cálculo de posición
-            Hand hand = frame.Hands[0];
+            // 2. Lógica de cálculo de posición usando la mano derecha
             Vector3 palm = hand.PalmPosition;
 
             // 🔹 Ignorar el eje Z (mantener solo plano XY)
@@ -95,7 +99,7 @@ public class LeapMousePointer : MonoBehaviour
         }
         else
         {
-            // --- MANO NO DETECTADA ---
+            // --- NO HAY MANO DERECHA (o no hay manos) ---
 
             calibrated = false; // Perder calibración
 
@@ -111,8 +115,7 @@ public class LeapMousePointer : MonoBehaviour
                 // Aplicar el alfa
                 pointerCanvasGroup.alpha = Mathf.Clamp01(newAlpha);
 
-                // ** IMPORTANTE: No actualizamos pointerUI.position **
-                // Esto hace que se quede en la última posición conocida.
+                // No actualizamos pointerUI.position → se queda en la última posición conocida
 
                 // Si el temporizador se completó, desactivar el objeto
                 if (handLostTimer >= fadeOutDelay)

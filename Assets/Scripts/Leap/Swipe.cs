@@ -22,12 +22,16 @@ public class SwipeGestureDetector : MonoBehaviour
         if (provider == null) return;
 
         Frame frame = provider.CurrentFrame;
+        if (frame == null || frame.Hands.Count == 0) return;
 
-        foreach (Hand hand in frame.Hands)
+        // ⬇️ SOLO MANO DERECHA
+        Hand rightHand = frame.Hands.Find(h => h.IsRight);
+        if (rightHand == null) return; // no hay mano derecha
+
+        // Solo manos abiertas
+        if (rightHand.GrabStrength < maxGrabStrength)
         {
-            // Solo manos abiertas
-            if (hand.GrabStrength < maxGrabStrength)
-                DetectSwipe(hand);
+            DetectSwipe(rightHand);
         }
     }
 
@@ -37,7 +41,6 @@ public class SwipeGestureDetector : MonoBehaviour
         if (Time.time - lastSwipeTime < cooldown)
             return;
 
-       
         float vx = hand.PalmVelocity.x;
         float vy = hand.PalmVelocity.y;
 
@@ -47,12 +50,12 @@ public class SwipeGestureDetector : MonoBehaviour
             if (vx > 0)
             {
                 GameManager.Instance.HandleSwipeLeft(hand);
-                Debug.Log("➡️ Swipe a la derecha detectado");
+                Debug.Log("➡️ Swipe a la derecha detectado (mano derecha)");
             }
             else
             {
                 GameManager.Instance.HandleSwipeRight(hand);
-                Debug.Log("⬅️ Swipe a la izquierda detectado");
+                Debug.Log("⬅️ Swipe a la izquierda detectado (mano derecha)");
             }
 
             lastSwipeTime = Time.time; // activar cooldown

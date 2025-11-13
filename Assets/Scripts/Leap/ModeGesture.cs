@@ -4,7 +4,7 @@ using Leap;
 public class PoseGestureDetector : MonoBehaviour
 {
     [Header("Leap")]
-    public LeapServiceProvider provider;
+    public LeapServiceProvider provider; // Leap provider
 
     [Header("Umbrales")]
     [Tooltip("Tiempo mínimo (s) que la pose debe mantenerse")]
@@ -12,7 +12,7 @@ public class PoseGestureDetector : MonoBehaviour
     [Tooltip("Tiempo de enfriamiento tras aceptar una pose")]
     public float cooldown = 1.0f;
     [Tooltip("La palma debe mirar ~hacia la cámara (1=de frente, 0=de canto)")]
-    [Range(0f, 1f)] public float palmFacingMinDot = 0.3f;
+    [Range(0f, 1f)] public float palmFacingMinDot = 0.7f;
 
     [Header("Mano")]
     public bool onlyLeftHand = true;
@@ -23,7 +23,7 @@ public class PoseGestureDetector : MonoBehaviour
     void Update()
     {
         if (provider == null) return;
-        var frame = provider.CurrentFrame;
+        Frame frame = provider.CurrentFrame;
         if (frame == null || frame.Hands.Count == 0) { poseTimer = 0f; return; }
 
         // Elige una mano (por simplicidad, la primera abierta)
@@ -39,7 +39,7 @@ public class PoseGestureDetector : MonoBehaviour
         var palmDir = new Vector3(hand.PalmNormal.x, hand.PalmNormal.y, hand.PalmNormal.z); // normal de la palma
         var camForward = Camera.main.transform.forward;
         float facing = Vector3.Dot(-palmDir.normalized, camForward.normalized); // palma hacia cámara
-        if (facing < palmFacingMinDot) { poseTimer = 0f; return; }
+        if (facing > palmFacingMinDot) { poseTimer = 0f; return; }
 
         // Lee dedos extendidos
         bool thumb = hand.GetFinger(Finger.FingerType.THUMB).IsExtended;
@@ -50,9 +50,9 @@ public class PoseGestureDetector : MonoBehaviour
 
         // Clasifica la pose
         GameMode? pose = null;
-        if (index && middle && !ring && !pinky) pose = GameMode.Kid;     // V / peace
+        if (!thumb && index && middle && !ring && !pinky) pose = GameMode.Kid;     // V / peace
         else if (thumb && index && middle && ring && pinky) pose = GameMode.Normal;  // mano abierta
-        else if (!thumb && index && middle && ring && !pinky) pose = GameMode.Expert;  // tres dedos
+        else if (!thumb && !index && middle && ring && pinky) pose = GameMode.Expert;  // tres dedos
 
         // Si no estamos en ninguna pose válida, resetea temporizador
         if (pose == null) { poseTimer = 0f; return; }

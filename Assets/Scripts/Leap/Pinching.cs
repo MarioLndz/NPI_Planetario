@@ -42,7 +42,6 @@ public class LeapPlanetSelector : MonoBehaviour
             eventSystemChecked = true;
         }
         if (eventSys == null) eventSys = EventSystem.current;
-
     }
 
     void Update()
@@ -53,7 +52,16 @@ public class LeapPlanetSelector : MonoBehaviour
             if (isPinching) isPinching = false;
             return;
         }
-        Hand hand = frame.Hands.Find(h => h.IsRight) ?? frame.Hands[0];
+
+        // ➜ SOLO MANO DERECHA
+        Hand hand = frame.Hands.Find(h => h.IsRight);
+        if (hand == null)
+        {
+            // No hay mano derecha visible → no hacemos nada
+            if (isPinching) isPinching = false;
+            return;
+        }
+
         float currentPinchStrength = hand.PinchStrength;
 
         if (currentPinchStrength > pinchOnThreshold && !isPinching)
