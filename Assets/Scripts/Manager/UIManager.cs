@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using static UnityEngine.Rendering.DebugUI;
+using UnityEngine.UI;
+
 
 public class UIManager : MonoBehaviour
 {
@@ -28,6 +30,19 @@ public class UIManager : MonoBehaviour
     public TMP_Text planetTitle;
     public TMP_Text planetDescription;
 
+
+    [Header("------ Mode Banner ------")]
+    public GameObject modeBannerPanel;   // Panel raíz con CanvasGroup
+
+    [Tooltip("Contenido visual de cada modo dentro del panel")]
+    public GameObject kidContent;
+    public GameObject normalContent;
+    public GameObject expertContent;
+
+    [Header("Mode Banner Behavior")]
+    public float modeBannerDuration = 3.5f; // cuanto tiempo se ve el banner
+
+
     void Awake()
     {
         // Configura el Singleton
@@ -44,6 +59,12 @@ public class UIManager : MonoBehaviour
         if (startMenuCanvas) startMenuCanvas.SetActive(true);
         if (PlanetMenu) PlanetMenu.SetActive(false);
 
+        if (modeBannerPanel)
+        {
+            modeBannerPanel.SetActive(false);
+            HideAllModeContents();
+        }
+
     }
 
     public void ClickedStart()
@@ -51,6 +72,27 @@ public class UIManager : MonoBehaviour
         //Debug.Log("Clicked Start");
         if (startMenuCanvas) ShowPanelFade(startMenuCanvas, false);
         GameManager.Instance.StartVisit();
+    }
+
+    //Metodo para probar los modos porque no tengo el leap
+    public void ChangeMode()
+    {
+        GameMode? pose = null;
+        if (startMenuCanvas != null)
+        {
+            if (GameManager.Instance?.CurrentMode == GameMode.Kid)
+            {
+                pose = GameMode.Normal;
+            }else if (GameManager.Instance?.CurrentMode == GameMode.Normal)
+            {
+                pose = GameMode.Expert;
+            }else
+            {
+                pose = GameMode.Kid;
+            }
+            GameManager.Instance?.SetMode(pose.Value);
+        }
+        
     }
 
     // --------- NUEVO: método genérico con fade ----------
@@ -181,4 +223,52 @@ public class UIManager : MonoBehaviour
 
         
     }
+
+    private void HideAllModeContents()
+    {
+        if (kidContent) kidContent.SetActive(false);
+        if (normalContent) normalContent.SetActive(false);
+        if (expertContent) expertContent.SetActive(false);
+    }
+
+    public void ShowModeBanner(GameMode mode)
+    {
+        if (!modeBannerPanel) return;
+
+        // Apagar todos los hijos primero
+        HideAllModeContents();
+
+        // Encender solo el que toca
+        GameObject toActivate = null;
+        switch (mode)
+        {
+            case GameMode.Kid:
+                toActivate = kidContent;
+                break;
+            case GameMode.Normal:
+                toActivate = normalContent;
+                break;
+            case GameMode.Expert:
+                toActivate = expertContent;
+                break;
+        }
+
+        if (toActivate) toActivate.SetActive(true);
+
+        // Mostrar el panel con tu sistema de fade
+        ShowPanelFade(modeBannerPanel, true);
+
+        // Opcional: ocultarlo solo después de unos segundos
+        StartCoroutine(HideModeBannerAfterDelay(modeBannerDuration));
+    }
+
+    private IEnumerator HideModeBannerAfterDelay(float delay)
+    {
+        yield return new WaitForSecondsRealtime(delay);
+        ShowPanelFade(modeBannerPanel, false);
+    }
+    
+
+
+
 }

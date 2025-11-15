@@ -54,6 +54,7 @@ public class GameManager : MonoBehaviour
         CurrentMode = mode;
         Debug.Log($"Modo cambiado a: {mode}");
 
+        UIManager.Instance?.ShowModeBanner(mode);
         // Aquí activa la versión del juego:
         // UIManager.Instance.ShowBanner(mode);
         // Cargar perfil de dificultad, etc.
