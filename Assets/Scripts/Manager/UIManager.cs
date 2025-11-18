@@ -23,12 +23,18 @@ public class UIManager : MonoBehaviour
     [Header("------ Start Menu ------")]
     public GameObject startMenuCanvas;
     public TMP_Text startButtonText;
+    public TMP_Text planetariumTitleText;
 
     [Header("------ Planet Elements ------")]
     public GameObject PlanetMenu;
 
     public TMP_Text planetTitle;
     public TMP_Text planetDescription;
+
+    [Header("Planet Info Pages")]
+    public ScrollRect planetInfoScroll;      // ScrollViewInfo (el ScrollRect)
+    public Transform planetInfoContent;      // Content
+    public GameObject planetPagePrefab;      // PagePanel prefab
 
 
     [Header("------ Mode Banner ------")]
@@ -211,6 +217,10 @@ public class UIManager : MonoBehaviour
     {
         if (GameManager.Instance.GetState() == GameStates.MainPanel) {
             startButtonText.text = PlanetTextCSVLoader.Instance.GetText("start_button");
+
+            if (planetariumTitleText)
+                planetariumTitleText.text = PlanetTextCSVLoader.Instance.GetText("planetarium_name");
+
             return;
         }
 
@@ -218,10 +228,11 @@ public class UIManager : MonoBehaviour
 
         // Si hay un target, actualizamos los textos
         PlanetClickable p = GameManager.Instance.GetCurrentTarget();
-        SetPlanetInfo(PlanetTextCSVLoader.Instance.GetInfo(p, 0));
+        //SetPlanetInfo(PlanetTextCSVLoader.Instance.GetInfo(p, 0));
         SetPlanetTitle(PlanetTextCSVLoader.Instance.GetNombre(p));
+        BuildPlanetPages(p.GetId());
 
-        
+
     }
 
     private void HideAllModeContents()
@@ -267,8 +278,90 @@ public class UIManager : MonoBehaviour
         yield return new WaitForSecondsRealtime(delay);
         ShowPanelFade(modeBannerPanel, false);
     }
-    
 
 
+    // ========== PÁGINAS DE PLANETA ==========
+
+    private readonly List<RectTransform> _planetPages = new();
+    private int _currentPlanetPage = 0;
+
+    void ClearPlanetPages()
+    {
+        if (planetInfoContent == null) return;
+        foreach (Transform child in planetInfoContent)
+            Destroy(child.gameObject);
+        _planetPages.Clear();
+        _currentPlanetPage = 0;
+        if (planetInfoScroll != null)
+            planetInfoScroll.horizontalNormalizedPosition = 0f;
+    }
+
+    void BuildPlanetPages(string planetId)
+    {
+        Debug.Log($"[UIManager] BuildPlanetPages para planetId='{planetId}', language={PlanetTextCSVLoader.Instance.currentLanguage}");
+
+        ClearPlanetPages();
+
+        if (PlanetTextCSVLoader.Instance == null) return;
+
+        var pages = PlanetTextCSVLoader.Instance.GetPlanetPages(planetId);
+        if (pages == null || pages.Count == 0)
+        {
+            Debug.LogWarning($"[UIManager] No hay páginas para '{planetId}'. Uso texto antiguo.");
+            // Fallback: usa el texto viejo en planetDescription si quieres
+            if (planetDescription != null)
+            {
+                planetDescription.gameObject.SetActive(true);
+                PlanetClickable p = GameManager.Instance.GetCurrentTarget();
+                planetDescription.text = PlanetTextCSVLoader.Instance.GetInfo(p, 0);
+            }
+            return;
+        }
+
+        // Ocultamos el texto antiguo si lo tenías
+        if (planetDescription != null)
+            planetDescription.gameObject.SetActive(false);
+
+        foreach (var pageData in pages)
+        {
+            var go = Instantiate(planetPagePrefab, planetInfoContent);
+            var tmps = go.GetComponentsInChildren<TMP_Text>();
+
+            if (tmps.Length >= 1) tmps[0].text = pageData.title;
+            if (tmps.Length >= 2) tmps[1].text = pageData.body;
+
+            var rt = go.GetComponent<RectTransform>();
+            if (rt != null) _planetPages.Add(rt);
+        }
+
+        SetPlanetPage(0, true);
+    }
+
+    void SetPlanetPage(int index, bool instant = false)
+    {
+        if (planetInfoScroll == null || _planetPages.Count == 0) return;
+
+        _currentPlanetPage = Mathf.Clamp(index, 0, _planetPages.Count - 1);
+
+        float t = (_planetPages.Count <= 1)
+            ? 0f
+            : (float)_currentPlanetPage / (_planetPages.Count - 1);
+
+        planetInfoScroll.horizontalNormalizedPosition = t;
+    }
+
+    public void NextPlanetPage()
+    {
+        if (_planetPages.Count == 0) return;
+        if (_currentPlanetPage >= _planetPages.Count - 1) return;
+        SetPlanetPage(_currentPlanetPage + 1);
+    }
+
+    public void PrevPlanetPage()
+    {
+        if (_planetPages.Count == 0) return;
+        if (_currentPlanetPage <= 0) return;
+        SetPlanetPage(_currentPlanetPage - 1);
+    }
 
 }

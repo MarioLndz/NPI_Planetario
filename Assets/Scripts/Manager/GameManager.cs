@@ -82,7 +82,7 @@ public class GameManager : MonoBehaviour
         sceneVolume.ToggleBackgroundBlur();
     }
 
-    public void RequestZoom (PlanetClickable planet)
+    /*public void RequestZoom (PlanetClickable planet)
     {
         if (_state == GameStates.MainPanel)
         {
@@ -104,7 +104,30 @@ public class GameManager : MonoBehaviour
             uiManager.SetPlanetTitle(textsDB.GetNombre(planet));
             uiManager.SetPlanetInfo(textsDB.GetInfo(planet, 0));
         }
+    }*/
+
+    public void RequestZoom(PlanetClickable planet)
+    {
+        if (_state == GameStates.MainPanel)
+        {
+            return;
+        }
+
+        bool? zoomIn = cam.RequestZoom(planet);
+
+        if (zoomIn == false)
+        {
+            // Zoom out: ocultar panel directamente
+            _state = GameStates.MainView;
+            uiManager.ShowPlanetPanel(false);
+        }
+        else
+        {
+            // Zoom in: cuando termine el zoom, HandleZoomCompleted se encargará de mostrar panel y refrescar
+            _state = GameStates.MainView;
+        }
     }
+
 
     private void HandleZoomCompleted(bool zoomIn)
     {
@@ -115,6 +138,7 @@ public class GameManager : MonoBehaviour
             if (planet != null)
             {
                 uiManager.ShowPlanetPanel(true);
+                uiManager.refreshUI();
             }
         }
     }
@@ -122,11 +146,25 @@ public class GameManager : MonoBehaviour
     // --------- Swipe handlers ----------
     public void HandleSwipeRight(Leap.Hand _)
     {
-        if (cam && cam.currentTarget) cam.SelectNeighbor(+1, wrap: true);
+        if (cam && cam.currentTarget)
+        {
+            cam.SelectNeighbor(+1, wrap: true);
+            if (_state != GameStates.MainPanel)
+            {
+                uiManager.refreshUI();    // planeta nuevo → páginas nuevas
+            }
+        }
     }
     public void HandleSwipeLeft(Leap.Hand _)
     {
-        if (cam && cam.currentTarget) cam.SelectNeighbor(-1, wrap: true);
+        if (cam && cam.currentTarget)
+        {
+            cam.SelectNeighbor(-1, wrap: true);
+            if (_state != GameStates.MainPanel)
+            {
+                uiManager.refreshUI();
+            }
+        }
     }
 
 
