@@ -36,7 +36,7 @@ public class GameManager : MonoBehaviour
             cam.OnZoomCompleted += HandleZoomCompleted;
         }
 
-        
+
     }
 
     public PlanetClickable GetCurrentTarget()
@@ -44,7 +44,7 @@ public class GameManager : MonoBehaviour
         return cam.currentTarget;
     }
 
-    public GameStates GetState ()
+    public GameStates GetState()
     {
         return _state;
     }
@@ -59,7 +59,7 @@ public class GameManager : MonoBehaviour
         // UIManager.Instance.ShowBanner(mode);
         // Cargar perfil de dificultad, etc.
     }
-    
+
 
     private void Start()
     {
@@ -71,13 +71,13 @@ public class GameManager : MonoBehaviour
         uiManager.refreshUI();
     }
 
-    public void StartVisit ()
+    public void StartVisit()
     {
         ToggleBackgroundBlur();
         _state = GameStates.MainView;
     }
 
-    public void ToggleBackgroundBlur ()
+    public void ToggleBackgroundBlur()
     {
         sceneVolume.ToggleBackgroundBlur();
     }

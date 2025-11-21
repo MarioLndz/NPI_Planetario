@@ -482,8 +482,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Planetario
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: e4ad28fb2ecd413469d3fab55fb65feb, type: 2}
-  m_sharedMaterial: {fileID: -194294697569813266, guid: e4ad28fb2ecd413469d3fab55fb65feb, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -1442,7 +1442,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &416269377
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1783,16 +1783,16 @@ RectTransform:
   m_GameObject: {fileID: 443991325}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: -12}
-  m_LocalScale: {x: 3.488, y: 2.4779, z: 1}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1129026411}
   m_Father: {fileID: 1275450118}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 340, y: -434.28314}
-  m_SizeDelta: {x: 160, y: 30}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 460.2, y: 105.7}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &443991327
 MonoBehaviour:
@@ -1870,7 +1870,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 2c4048e4bd41636499b0b0b420195d7d, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 148fb7494de83bf46af7d054b5fc0d76, type: 3}
   m_Type: 1
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -2461,8 +2461,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 340, y: -162.63644}
-  m_SizeDelta: {x: 183.44, y: 30.04}
+  m_AnchoredPosition: {x: 340, y: -146.95497}
+  m_SizeDelta: {x: 183.44, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &570815241
 MonoBehaviour:
@@ -2880,9 +2880,6 @@ MonoBehaviour:
   PlanetMenu: {fileID: 549497717}
   planetTitle: {fileID: 418469111}
   planetDescription: {fileID: 490550359}
-  planetInfoScroll: {fileID: 0}
-  planetInfoContent: {fileID: 0}
-  planetPagePrefab: {fileID: 6038817156032100024, guid: 795789c5d188fb449ab87eb590e5bb7c, type: 3}
   modeBannerPanel: {fileID: 1382237728}
   kidContent: {fileID: 1232509680}
   normalContent: {fileID: 1999944491}
@@ -2920,10 +2917,10 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 570815240}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 91.72, y: -15.02}
-  m_SizeDelta: {x: 153.44, y: 20.04}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 153.44, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &733531269
 MonoBehaviour:
@@ -2947,8 +2944,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Start Visit
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: e4ad28fb2ecd413469d3fab55fb65feb, type: 2}
-  m_sharedMaterial: {fileID: -194294697569813266, guid: e4ad28fb2ecd413469d3fab55fb65feb, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -3528,8 +3525,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 24
-  m_fontSizeBase: 24
+  m_fontSize: 63.9
+  m_fontSizeBase: 63.9
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -3715,8 +3712,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: "\xA1Modo ni\xF1o activado!"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 2e498d1c8094910479dc3e1b768306a4, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 2e498d1c8094910479dc3e1b768306a4, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -3912,7 +3909,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1228643002
 RectTransform:
   m_ObjectHideFlags: 0
@@ -4669,9 +4666,9 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 1825901897}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 140, y: -120}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0, y: 0}
 --- !u!114 &1469668389
@@ -5488,9 +5485,9 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 1825901897}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 70, y: -70}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1790058709
@@ -5626,7 +5623,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 133.89, y: -1825.8}
-  m_SizeDelta: {x: 260, y: 140}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1825901898
 MonoBehaviour:

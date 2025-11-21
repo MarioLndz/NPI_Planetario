@@ -207,7 +207,7 @@ public class PlanetTextCSVLoader : MonoBehaviour
         }
     }
 
-    
+
 
     private static List<string> ReadLine(string s, ref int i)
     {

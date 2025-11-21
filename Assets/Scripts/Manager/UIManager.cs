@@ -32,11 +32,6 @@ public class UIManager : MonoBehaviour
     public TMP_Text planetTitle;
     public TMP_Text planetDescription;
 
-    [Header("Planet Info Pages")]
-    public ScrollRect planetInfoScroll;      // ScrollViewInfo (el ScrollRect)
-    public Transform planetInfoContent;      // Content
-    public GameObject planetPagePrefab;      // PagePanel prefab
-
 
     [Header("------ Mode Banner ------")]
     public GameObject modeBannerPanel;   // Panel raíz con CanvasGroup
@@ -96,16 +91,18 @@ public class UIManager : MonoBehaviour
             if (GameManager.Instance?.CurrentMode == GameMode.Kid)
             {
                 pose = GameMode.Normal;
-            }else if (GameManager.Instance?.CurrentMode == GameMode.Normal)
+            }
+            else if (GameManager.Instance?.CurrentMode == GameMode.Normal)
             {
                 pose = GameMode.Expert;
-            }else
+            }
+            else
             {
                 pose = GameMode.Kid;
             }
             GameManager.Instance?.SetMode(pose.Value);
         }
-        
+
     }
 
     // --------- NUEVO: método genérico con fade ----------
@@ -196,7 +193,8 @@ public class UIManager : MonoBehaviour
     // Mantengo tu API, pero ahora usa fade:
     public void ShowPlanetPanel(bool show = true)
     {
-        if (!PlanetMenu) {
+        if (!PlanetMenu)
+        {
             return;
         }
 
@@ -206,7 +204,8 @@ public class UIManager : MonoBehaviour
             if (p != null)
             {
 
-            } else
+            }
+            else
             {
                 Debug.Log("Error, planeta solicitado pero no hay ninguno como objetivo");
             }
@@ -236,7 +235,7 @@ public class UIManager : MonoBehaviour
     public void changeLanguage(string newLanguage)
     {
         Language lan;
-        
+
         if (PlanetTextCSVLoader.TryParseLanguage(newLanguage, out lan))
         {
             PlanetTextCSVLoader.Instance.setLanguage(lan);
@@ -244,9 +243,10 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    public void refreshUI ()
+    public void refreshUI()
     {
-        if (GameManager.Instance.GetState() == GameStates.MainPanel) {
+        if (GameManager.Instance.GetState() == GameStates.MainPanel)
+        {
             startButtonText.text = PlanetTextCSVLoader.Instance.GetText("start_button");
 
             if (planetariumTitleText)
