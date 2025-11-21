@@ -125,6 +125,7 @@ public class GameManager : MonoBehaviour
         {
             // Zoom in: cuando termine el zoom, HandleZoomCompleted se encargará de mostrar panel y refrescar
             _state = GameStates.MainView;
+
         }
     }
 

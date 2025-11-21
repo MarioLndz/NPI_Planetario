@@ -1,9 +1,10 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Numerics;
 using TMPro;
 using UnityEngine;
-using static UnityEngine.Rendering.DebugUI;
 using UnityEngine.UI;
+using static UnityEngine.Rendering.DebugUI;
 
 
 public class UIManager : MonoBehaviour
@@ -49,6 +50,8 @@ public class UIManager : MonoBehaviour
     public float modeBannerDuration = 3.5f; // cuanto tiempo se ve el banner
 
 
+    private PlanetTextCSVLoader textsDB;
+
     void Awake()
     {
         // Configura el Singleton
@@ -73,6 +76,10 @@ public class UIManager : MonoBehaviour
 
     }
 
+    private void Start()
+    {
+        textsDB = PlanetTextCSVLoader.Instance;
+    }
     public void ClickedStart()
     {
         //Debug.Log("Clicked Start");
@@ -189,17 +196,41 @@ public class UIManager : MonoBehaviour
     // Mantengo tu API, pero ahora usa fade:
     public void ShowPlanetPanel(bool show = true)
     {
-        if (PlanetMenu) ShowPanelFade(PlanetMenu, show);
+        if (!PlanetMenu) {
+            return;
+        }
+
+        if (show == true)
+        {
+            PlanetClickable p = GameManager.Instance.GetCurrentTarget();
+            if (p != null)
+            {
+
+            } else
+            {
+                Debug.Log("Error, planeta solicitado pero no hay ninguno como objetivo");
+            }
+
+            SetPlanetTitle(p);
+            SetPlanetInfo(p, GameManager.Instance.CurrentMode);
+        }
+
+        ShowPanelFade(PlanetMenu, show);
     }
 
-    public void SetPlanetTitle(string title)
+    public void SetPlanetTitle(PlanetClickable planet)
     {
-        if (planetTitle) planetTitle.text = title;
+        if (planetTitle) planetTitle.text = textsDB.GetNombre(planet);
     }
 
-    public void SetPlanetInfo(string info)
+    public void SetPlanetInfo(PlanetClickable planet, GameMode mode)
     {
-        if (planetDescription) planetDescription.text = info;
+        if (planetDescription)
+        {
+            string info = textsDB.GetInfo(planet, mode);
+
+            planetDescription.text = info;
+        }
     }
 
     public void changeLanguage(string newLanguage)
@@ -228,9 +259,10 @@ public class UIManager : MonoBehaviour
 
         // Si hay un target, actualizamos los textos
         PlanetClickable p = GameManager.Instance.GetCurrentTarget();
-        //SetPlanetInfo(PlanetTextCSVLoader.Instance.GetInfo(p, 0));
-        SetPlanetTitle(PlanetTextCSVLoader.Instance.GetNombre(p));
-        BuildPlanetPages(p.GetId());
+        SetPlanetInfo(p, GameManager.Instance.CurrentMode);
+
+        //SetPlanetTitle(PlanetTextCSVLoader.Instance.GetNombre(p));
+        //BuildPlanetPages(p.GetId());
 
 
     }
@@ -278,90 +310,4 @@ public class UIManager : MonoBehaviour
         yield return new WaitForSecondsRealtime(delay);
         ShowPanelFade(modeBannerPanel, false);
     }
-
-
-    // ========== PÁGINAS DE PLANETA ==========
-
-    private readonly List<RectTransform> _planetPages = new();
-    private int _currentPlanetPage = 0;
-
-    void ClearPlanetPages()
-    {
-        if (planetInfoContent == null) return;
-        foreach (Transform child in planetInfoContent)
-            Destroy(child.gameObject);
-        _planetPages.Clear();
-        _currentPlanetPage = 0;
-        if (planetInfoScroll != null)
-            planetInfoScroll.horizontalNormalizedPosition = 0f;
-    }
-
-    void BuildPlanetPages(string planetId)
-    {
-        Debug.Log($"[UIManager] BuildPlanetPages para planetId='{planetId}', language={PlanetTextCSVLoader.Instance.currentLanguage}");
-
-        ClearPlanetPages();
-
-        if (PlanetTextCSVLoader.Instance == null) return;
-
-        var pages = PlanetTextCSVLoader.Instance.GetPlanetPages(planetId);
-        if (pages == null || pages.Count == 0)
-        {
-            Debug.LogWarning($"[UIManager] No hay páginas para '{planetId}'. Uso texto antiguo.");
-            // Fallback: usa el texto viejo en planetDescription si quieres
-            if (planetDescription != null)
-            {
-                planetDescription.gameObject.SetActive(true);
-                PlanetClickable p = GameManager.Instance.GetCurrentTarget();
-                planetDescription.text = PlanetTextCSVLoader.Instance.GetInfo(p, 0);
-            }
-            return;
-        }
-
-        // Ocultamos el texto antiguo si lo tenías
-        if (planetDescription != null)
-            planetDescription.gameObject.SetActive(false);
-
-        foreach (var pageData in pages)
-        {
-            var go = Instantiate(planetPagePrefab, planetInfoContent);
-            var tmps = go.GetComponentsInChildren<TMP_Text>();
-
-            if (tmps.Length >= 1) tmps[0].text = pageData.title;
-            if (tmps.Length >= 2) tmps[1].text = pageData.body;
-
-            var rt = go.GetComponent<RectTransform>();
-            if (rt != null) _planetPages.Add(rt);
-        }
-
-        SetPlanetPage(0, true);
-    }
-
-    void SetPlanetPage(int index, bool instant = false)
-    {
-        if (planetInfoScroll == null || _planetPages.Count == 0) return;
-
-        _currentPlanetPage = Mathf.Clamp(index, 0, _planetPages.Count - 1);
-
-        float t = (_planetPages.Count <= 1)
-            ? 0f
-            : (float)_currentPlanetPage / (_planetPages.Count - 1);
-
-        planetInfoScroll.horizontalNormalizedPosition = t;
-    }
-
-    public void NextPlanetPage()
-    {
-        if (_planetPages.Count == 0) return;
-        if (_currentPlanetPage >= _planetPages.Count - 1) return;
-        SetPlanetPage(_currentPlanetPage + 1);
-    }
-
-    public void PrevPlanetPage()
-    {
-        if (_planetPages.Count == 0) return;
-        if (_currentPlanetPage <= 0) return;
-        SetPlanetPage(_currentPlanetPage - 1);
-    }
-
 }
