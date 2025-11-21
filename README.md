@@ -1,3 +1,11 @@
+# Falta por hacer
+- Tutorial sobre cuales son los gestos, considerando el poder saltartelo
+- Accesiblidad (botones grandes, colores, guía por voz...)
+- Mapa
+- Idiomas, y poder cambiarlos en cualquier momento
+- Modo niños y disitintos tipos
+- Beta del crossy road
+
 # Ideas
 
 ## 1-Diseño
