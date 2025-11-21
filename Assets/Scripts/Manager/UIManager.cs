@@ -35,6 +35,7 @@ public class UIManager : MonoBehaviour
 
     [Header("------ Mode Banner ------")]
     public GameObject modeBannerPanel;   // Panel raíz con CanvasGroup
+    public TMP_Text modeButtonText;
 
     [Tooltip("Contenido visual de cada modo dentro del panel")]
     public GameObject kidContent;
@@ -248,6 +249,7 @@ public class UIManager : MonoBehaviour
         if (GameManager.Instance.GetState() == GameStates.MainPanel)
         {
             startButtonText.text = PlanetTextCSVLoader.Instance.GetText("start_button");
+            modeButtonText.text = PlanetTextCSVLoader.Instance.GetText("mode_button");
 
             if (planetariumTitleText)
                 planetariumTitleText.text = PlanetTextCSVLoader.Instance.GetText("planetarium_name");
