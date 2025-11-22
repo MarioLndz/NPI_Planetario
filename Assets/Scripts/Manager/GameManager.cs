@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.Rendering;
+using UnityEngine.SceneManagement;
 
 public enum GameMode { Kid, Normal, Expert }
 public class GameManager : MonoBehaviour
@@ -77,6 +78,14 @@ public class GameManager : MonoBehaviour
         _state = GameStates.MainView;
     }
 
+    public void GoToMainPanel()
+    {
+        ToggleBackgroundBlur();
+        _state = GameStates.MainPanel;
+
+        uiManager.GoToMainPanel();
+    }
+
     public void ToggleBackgroundBlur()
     {
         sceneVolume.ToggleBackgroundBlur();
@@ -124,7 +133,7 @@ public class GameManager : MonoBehaviour
         else
         {
             // Zoom in: cuando termine el zoom, HandleZoomCompleted se encargará de mostrar panel y refrescar
-            _state = GameStates.MainView;
+            _state = GameStates.ZoomView;
 
         }
     }
@@ -168,5 +177,31 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    public void HandleSwipeBack(Leap.Hand _)
+    {
+        GoBack();
+    }
 
+    private void GoBack()
+    {
+        if (_state == GameStates.MainPanel)
+        {
+            return;
+        }
+
+        if (_state == GameStates.MainView)
+        {
+            GoToMainPanel();
+        }
+
+        if (_state == GameStates.ZoomView)
+        {
+            this.RequestZoom(GetCurrentTarget());
+        }
+    }
+
+    public void ResetScene()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+    }
 }
