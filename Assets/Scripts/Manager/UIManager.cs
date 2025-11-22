@@ -7,6 +7,7 @@ using UnityEngine.UI;
 using static UnityEngine.Rendering.DebugUI;
 
 
+
 public class UIManager : MonoBehaviour
 {
     // --- Singleton ---
@@ -81,6 +82,14 @@ public class UIManager : MonoBehaviour
         //Debug.Log("Clicked Start");
         if (startMenuCanvas) ShowPanelFade(startMenuCanvas, false);
         GameManager.Instance.StartVisit();
+    }
+
+    public void ClickedMuseumMap()
+    {
+        if (startMenuCanvas) ShowPanelFade(startMenuCanvas, false);
+
+        // delegamos la lógica al GameManager
+        GameManager.Instance.GoToMuseumMap();
     }
 
     //Metodo para probar los modos porque no tengo el leap
@@ -312,4 +321,6 @@ public class UIManager : MonoBehaviour
         yield return new WaitForSecondsRealtime(delay);
         ShowPanelFade(modeBannerPanel, false);
     }
+
+
 }

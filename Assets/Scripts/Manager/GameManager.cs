@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.Rendering;
+using UnityEngine.SceneManagement;
 
 public enum GameMode { Kid, Normal, Expert }
 public class GameManager : MonoBehaviour
@@ -16,6 +17,9 @@ public class GameManager : MonoBehaviour
     [SerializeField] private PlanetZoomController cam;
 
     private GameStates _state;
+
+    [Header("Museum Scene")]                
+    [SerializeField] private string museumSceneName = "MuseoMapa";
 
     void Awake()
     {
@@ -75,6 +79,17 @@ public class GameManager : MonoBehaviour
     {
         ToggleBackgroundBlur();
         _state = GameStates.MainView;
+    }
+
+    public void GoToMuseumMap()
+    {
+        if (string.IsNullOrEmpty(museumSceneName))
+        {
+            Debug.LogError("GameManager: museumSceneName no está configurado.");
+            return;
+        }
+
+        SceneManager.LoadScene(museumSceneName);
     }
 
     public void ToggleBackgroundBlur()
