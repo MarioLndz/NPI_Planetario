@@ -2881,6 +2881,7 @@ MonoBehaviour:
   planetTitle: {fileID: 418469111}
   planetDescription: {fileID: 490550359}
   modeBannerPanel: {fileID: 1382237728}
+  modeButtonText: {fileID: 1129026412}
   kidContent: {fileID: 1232509680}
   normalContent: {fileID: 1999944491}
   expertContent: {fileID: 1296463265}
