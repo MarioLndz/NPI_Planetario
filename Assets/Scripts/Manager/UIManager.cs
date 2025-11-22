@@ -83,6 +83,11 @@ public class UIManager : MonoBehaviour
         GameManager.Instance.StartVisit();
     }
 
+    public void GoToMainPanel()
+    {
+        if (startMenuCanvas) ShowPanelFade(startMenuCanvas, true);
+    }
+
     //Metodo para probar los modos porque no tengo el leap
     public void ChangeMode()
     {
