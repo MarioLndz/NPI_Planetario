@@ -59,7 +59,7 @@ public class UIManager : MonoBehaviour
     public Sprite primeraPlantaSprite;
     public Sprite segundaPlantaSprite;
     public Sprite terceraPlantaSprite;
-    
+
 
     void Awake()
     {
