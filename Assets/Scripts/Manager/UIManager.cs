@@ -45,8 +45,14 @@ public class UIManager : MonoBehaviour
     [Header("Mode Banner Behavior")]
     public float modeBannerDuration = 3.5f; // cuanto tiempo se ve el banner
 
+    [Header("Videos")]
+    public GameObject tutorialsCanva;
+
+    public GameObject standByCanva;
 
     private PlanetTextCSVLoader textsDB;
+
+    public int tutorialPlaying = -1;
 
     void Awake()
     {
@@ -60,8 +66,15 @@ public class UIManager : MonoBehaviour
             Instance = this;
         }
 
+    }
+
+    private void Start()
+    {
+        textsDB = PlanetTextCSVLoader.Instance;
+
+        if (standByCanva) standByCanva.SetActive(true);
         // Panel oculto desde el principio
-        if (startMenuCanvas) startMenuCanvas.SetActive(true);
+        if (startMenuCanvas) startMenuCanvas.SetActive(false);
         if (PlanetMenu) PlanetMenu.SetActive(false);
 
         if (modeBannerPanel)
@@ -69,12 +82,6 @@ public class UIManager : MonoBehaviour
             modeBannerPanel.SetActive(false);
             HideAllModeContents();
         }
-
-    }
-
-    private void Start()
-    {
-        textsDB = PlanetTextCSVLoader.Instance;
     }
     public void ClickedStart()
     {
@@ -86,6 +93,12 @@ public class UIManager : MonoBehaviour
     public void GoToMainPanel()
     {
         if (startMenuCanvas) ShowPanelFade(startMenuCanvas, true);
+    }
+
+    public void SalirStandBy ()
+    {
+        ShowPanelFade(standByCanva, false, 1f);
+        ShowPanelFade(startMenuCanvas, true, 1.5f);
     }
 
     //Metodo para probar los modos porque no tengo el leap
@@ -317,4 +330,19 @@ public class UIManager : MonoBehaviour
         yield return new WaitForSecondsRealtime(delay);
         ShowPanelFade(modeBannerPanel, false);
     }
+
+    public void ShowTutorial (int id = 0)
+    {
+        VideoManager.Instance.PlayTutorial(id);
+        tutorialPlaying = id;
+        ShowPanelFade(tutorialsCanva, true);
+    }
+
+    public void HideTutorial()
+    {
+        tutorialPlaying = -1;
+        ShowPanelFade(tutorialsCanva, false);
+        VideoManager.Instance.StopTutorial();
+    }
+
 }

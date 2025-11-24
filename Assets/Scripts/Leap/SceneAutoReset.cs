@@ -14,15 +14,11 @@ public class SceneAutoReset : MonoBehaviour
     [Header("Debug (Solo lectura)")]
     [SerializeField] private float currentTimer = 0f;
 
+    private bool manosDetectadasPrimeraVez = false;
+
     void Update()
     {
         if (provider == null) return;
-
-        if (GameManager.Instance.GetState() == GameStates.MainPanel)
-        {
-            currentTimer = 0f;
-            return;
-        }
 
         // Obtenemos el frame actual
         Frame frame = provider.CurrentFrame;
@@ -32,9 +28,17 @@ public class SceneAutoReset : MonoBehaviour
         {
             // Si hay manos, reseteamos el temporizador a 0
             currentTimer = 0f;
+
+            if (!manosDetectadasPrimeraVez)
+            {
+                manosDetectadasPrimeraVez = true;
+                GameManager.Instance.SalirStandBy();
+            }
         }
         else
         {
+            if (GameManager.Instance.GetState() == GameStates.StandBy) return;
+
             // Si NO hay manos, empezamos a sumar tiempo
             currentTimer += Time.deltaTime;
 

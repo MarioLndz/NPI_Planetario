@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.SceneManagement;
 
@@ -17,6 +18,11 @@ public class GameManager : MonoBehaviour
     [SerializeField] private PlanetZoomController cam;
 
     private GameStates _state;
+
+    // TUTORIALES
+    private bool _showClickTutorial = true;
+    private bool _showSwipeTutorial = true;
+    private bool _showSwipeBackTutorial = true;
 
     void Awake()
     {
@@ -67,15 +73,27 @@ public class GameManager : MonoBehaviour
         uiManager = UIManager.Instance;
         textsDB = PlanetTextCSVLoader.Instance;
 
-        _state = GameStates.MainPanel;
+        _state = GameStates.StandBy;
 
         uiManager.refreshUI();
     }
 
-    public void StartVisit()
+    public void SalirStandBy() {
+        uiManager.SalirStandBy();
+        _state = GameStates.MainPanel;
+        uiManager.refreshUI();
+    }
+
+    public void StartVisit() 
     {
         ToggleBackgroundBlur();
         _state = GameStates.MainView;
+
+        if (_showClickTutorial)
+        {
+            Debug.Log("Show Click");
+            uiManager.ShowTutorial(0);
+        }
     }
 
     public void GoToMainPanel()
@@ -117,6 +135,16 @@ public class GameManager : MonoBehaviour
 
     public void RequestZoom(PlanetClickable planet)
     {
+        if (_showClickTutorial)
+        {
+            _showClickTutorial = false;
+
+            if (uiManager.tutorialPlaying == 0)
+            {
+                uiManager.HideTutorial();
+            }
+        }
+
         if (_state == GameStates.MainPanel)
         {
             return;
@@ -149,6 +177,14 @@ public class GameManager : MonoBehaviour
             {
                 uiManager.ShowPlanetPanel(true);
                 uiManager.refreshUI();
+
+                if (_showSwipeBackTutorial)
+                {
+                    uiManager.ShowTutorial(2);
+                    return;
+                }
+
+                if (_showSwipeTutorial) uiManager.ShowTutorial(1);
             }
         }
     }
@@ -163,6 +199,12 @@ public class GameManager : MonoBehaviour
             {
                 uiManager.refreshUI();    // planeta nuevo → páginas nuevas
             }
+
+            _showSwipeTutorial = false;
+            if (uiManager.tutorialPlaying == 1)
+            {
+                uiManager.HideTutorial();
+            }
         }
     }
     public void HandleSwipeLeft(Leap.Hand _)
@@ -173,6 +215,12 @@ public class GameManager : MonoBehaviour
             if (_state != GameStates.MainPanel)
             {
                 uiManager.refreshUI();
+            }
+
+            _showSwipeTutorial = false;
+            if (uiManager.tutorialPlaying == 1)
+            {
+                uiManager.HideTutorial();
             }
         }
     }
@@ -187,6 +235,12 @@ public class GameManager : MonoBehaviour
         if (_state == GameStates.MainPanel)
         {
             return;
+        }
+
+        _showSwipeBackTutorial = false;
+        if (uiManager.tutorialPlaying >= 1)
+        {
+            uiManager.HideTutorial();
         }
 
         if (_state == GameStates.MainView)
@@ -204,4 +258,5 @@ public class GameManager : MonoBehaviour
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
+
 }
