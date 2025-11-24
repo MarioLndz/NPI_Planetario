@@ -19,6 +19,9 @@ public class GameManager : MonoBehaviour
 
     private GameStates _state;
 
+    [Header("Museum Scene")]                
+    [SerializeField] private string museumSceneName = "MuseoMapa";
+
     // TUTORIALES
     private bool _showClickTutorial = true;
     private bool _showSwipeTutorial = true;
@@ -102,6 +105,17 @@ public class GameManager : MonoBehaviour
         _state = GameStates.MainPanel;
 
         uiManager.GoToMainPanel();
+    }
+
+    public void GoToMuseumMap()
+    {
+        if (string.IsNullOrEmpty(museumSceneName))
+        {
+            Debug.LogError("GameManager: museumSceneName no está configurado.");
+            return;
+        }
+
+        SceneManager.LoadScene(museumSceneName);
     }
 
     public void ToggleBackgroundBlur()

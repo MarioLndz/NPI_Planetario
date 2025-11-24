@@ -7,6 +7,7 @@ using UnityEngine.UI;
 using static UnityEngine.Rendering.DebugUI;
 
 
+
 public class UIManager : MonoBehaviour
 {
     // --- Singleton ---
@@ -52,6 +53,18 @@ public class UIManager : MonoBehaviour
 
     private PlanetTextCSVLoader textsDB;
 
+    [Header("------ Museum Maps ------")]                // NUEVO
+    public GameObject mapsPanel;                        // PanelMapas (GameObject entero)
+    public Image mapsImage;                             // Image donde se ve el plano
+
+    [Header("Museum Maps Sprites")]                     // NUEVO
+    public Sprite plantaBajaSprite;
+    public Sprite primeraPlantaNiñosSprite;
+    public Sprite primeraPlantaSprite;
+    public Sprite segundaPlantaSprite;
+    public Sprite terceraPlantaSprite;
+    
+
     public int tutorialPlaying = -1;
 
     void Awake()
@@ -82,12 +95,72 @@ public class UIManager : MonoBehaviour
             modeBannerPanel.SetActive(false);
             HideAllModeContents();
         }
+
+        if (mapsPanel) mapsPanel.SetActive(false);
+
     }
+
     public void ClickedStart()
     {
         //Debug.Log("Clicked Start");
         if (startMenuCanvas) ShowPanelFade(startMenuCanvas, false);
         GameManager.Instance.StartVisit();
+    }
+
+    public void OpenMapsPanel()
+    {
+        // Ocultamos menú de inicio y mostramos PanelMapas
+        if (startMenuCanvas) ShowPanelFade(startMenuCanvas, false);
+        if (mapsPanel) ShowPanelFade(mapsPanel, true);
+        if (mapsImage && plantaBajaSprite)
+            mapsImage.sprite = plantaBajaSprite;
+    }
+
+    public void CloseMapsPanel()
+    {
+        // Volver al menú de inicio
+        if (mapsPanel) ShowPanelFade(mapsPanel, false);
+        if (startMenuCanvas) ShowPanelFade(startMenuCanvas, true);
+    }
+
+    // --- NUEVO: elegir planta ---
+    // Solo cambian el sprite de mapsImage
+
+    public void ShowPlantaBaja()
+    {
+        if (mapsImage && plantaBajaSprite)
+            mapsImage.sprite = plantaBajaSprite;
+    }
+
+    public void ShowPrimeraPlanta()
+    {
+        if(GameManager.Instance?.CurrentMode == GameMode.Kid)
+        {
+            if (mapsImage && primeraPlantaNiñosSprite)
+                mapsImage.sprite = primeraPlantaNiñosSprite;
+        }else if (mapsImage && primeraPlantaSprite)
+            mapsImage.sprite = primeraPlantaSprite;
+    }
+
+    public void ShowSegundaPlanta()
+    {
+        if (mapsImage && segundaPlantaSprite)
+            mapsImage.sprite = segundaPlantaSprite;
+    }
+
+    public void ShowTerceraPlanta()
+    {
+        if (mapsImage && terceraPlantaSprite)
+            mapsImage.sprite = terceraPlantaSprite;
+    }
+
+
+    public void ClickedMuseumMap()
+    {
+        if (startMenuCanvas) ShowPanelFade(startMenuCanvas, false);
+
+        // delegamos la lógica al GameManager
+        GameManager.Instance.GoToMuseumMap();
     }
 
     public void GoToMainPanel()
@@ -330,6 +403,8 @@ public class UIManager : MonoBehaviour
         yield return new WaitForSecondsRealtime(delay);
         ShowPanelFade(modeBannerPanel, false);
     }
+
+
 
     public void ShowTutorial (int id = 0)
     {
