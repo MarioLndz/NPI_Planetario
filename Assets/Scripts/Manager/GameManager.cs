@@ -49,6 +49,20 @@ public class GameManager : MonoBehaviour
 
     }
 
+    void Update()
+    {
+        // Solo reaccionamos a input mientras estamos en StandBy
+        if (_state != GameStates.StandBy) return;
+
+        // Click de ratón 
+        if (Input.GetMouseButtonDown(0))
+        {
+            SalirStandBy();
+            return;
+        }
+
+    }
+
     public PlanetClickable GetCurrentTarget()
     {
         return cam.currentTarget;
@@ -82,6 +96,9 @@ public class GameManager : MonoBehaviour
     }
 
     public void SalirStandBy() {
+        // Si ya hemos salido, no hacemos nada
+        if (_state != GameStates.StandBy) return;
+
         uiManager.SalirStandBy();
         _state = GameStates.MainPanel;
         uiManager.refreshUI();

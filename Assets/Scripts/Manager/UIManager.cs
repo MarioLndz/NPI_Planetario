@@ -25,6 +25,8 @@ public class UIManager : MonoBehaviour
     [Header("------ Start Menu ------")]
     public GameObject startMenuCanvas;
     public TMP_Text startButtonText;
+    public TMP_Text GoToMapsButtonText;
+    public TMP_Text GoTo3DMapsButtonText;
     public TMP_Text planetariumTitleText;
 
     [Header("------ Planet Elements ------")]
@@ -63,6 +65,15 @@ public class UIManager : MonoBehaviour
     public Sprite primeraPlantaSprite;
     public Sprite segundaPlantaSprite;
     public Sprite terceraPlantaSprite;
+
+    [Header("------ Map Panel Texts ------")]
+    public TMP_Text mapsTitleText;              // "Mapas del Planetario"
+    public TMP_Text backMapsButtonText;         // "Atrás"
+
+    public TMP_Text plantaBajaButtonText;       // "Planta Baja"
+    public TMP_Text primeraPlantaButtonText;    // "Primera Planta"
+    public TMP_Text segundaPlantaButtonText;    // "Segunda Planta"
+    public TMP_Text terceraPlantaButtonText;    // "Tercera Planta"
 
 
     public int tutorialPlaying = -1;
@@ -340,10 +351,30 @@ public class UIManager : MonoBehaviour
         if (GameManager.Instance.GetState() == GameStates.MainPanel)
         {
             startButtonText.text = PlanetTextCSVLoader.Instance.GetText("start_button");
+            GoToMapsButtonText.text = PlanetTextCSVLoader.Instance.GetText("maps_button");
+            GoTo3DMapsButtonText.text = PlanetTextCSVLoader.Instance.GetText("3Dmaps_button");
             modeButtonText.text = PlanetTextCSVLoader.Instance.GetText("mode_button");
 
             if (planetariumTitleText)
                 planetariumTitleText.text = PlanetTextCSVLoader.Instance.GetText("planetarium_name");
+
+            if (mapsTitleText)
+                mapsTitleText.text = textsDB.GetText("maps_title");
+
+            if (backMapsButtonText)
+                backMapsButtonText.text = textsDB.GetText("maps_back");
+
+            if (plantaBajaButtonText)
+                plantaBajaButtonText.text = textsDB.GetText("maps_ground");
+
+            if (primeraPlantaButtonText)
+                primeraPlantaButtonText.text = textsDB.GetText("maps_first");
+
+            if (segundaPlantaButtonText)
+                segundaPlantaButtonText.text = textsDB.GetText("maps_second");
+
+            if (terceraPlantaButtonText)
+                terceraPlantaButtonText.text = textsDB.GetText("maps_third");
 
             return;
         }

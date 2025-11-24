@@ -54,3 +54,13 @@ neptuno_info_1;Hubble monitoriza Neptuno con observaciones en visible e infrarro
 ;;
 map3d_title;Mapa 3D del Planetario;Planetarium's 3D Map
 map3D_back;Museo;Museum
+;;
+maps_title;Mapas del Planetario;Planetarium Maps
+maps_back;Atrás;Back
+maps_ground;Planta Baja;Ground Floor
+maps_first;Primera Planta;First Floor
+maps_second;Segunda Planta;Second Floor
+maps_third;Tercera Planta;Third Floor
+;;
+3Dmaps_button;Mapa 3D del museo;Museum 3D Map
+maps_button;Mapa del museo;Museum Map
