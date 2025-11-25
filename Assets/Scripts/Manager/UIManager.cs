@@ -95,6 +95,7 @@ public class UIManager : MonoBehaviour
     private void Start()
     {
         textsDB = PlanetTextCSVLoader.Instance;
+        textsDB.languageChange += refreshUI;
 
         if (standByCanva) standByCanva.SetActive(true);
         // Panel oculto desde el principio
@@ -108,6 +109,7 @@ public class UIManager : MonoBehaviour
         }
 
         if (mapsPanel) mapsPanel.SetActive(false);
+        if (tutorialsCanva) tutorialsCanva.SetActive(false);
 
     }
 
@@ -357,7 +359,12 @@ public class UIManager : MonoBehaviour
 
             if (planetariumTitleText)
                 planetariumTitleText.text = PlanetTextCSVLoader.Instance.GetText("planetarium_name");
+            return;
+        }
 
+        if (GameManager.Instance.GetState() == GameStates.MapsPanel)
+        {
+            //Debug.Log("REFRESH EN PANEL");
             if (mapsTitleText)
                 mapsTitleText.text = textsDB.GetText("maps_title");
 
@@ -375,7 +382,6 @@ public class UIManager : MonoBehaviour
 
             if (terceraPlantaButtonText)
                 terceraPlantaButtonText.text = textsDB.GetText("maps_third");
-
             return;
         }
 
@@ -385,7 +391,7 @@ public class UIManager : MonoBehaviour
         PlanetClickable p = GameManager.Instance.GetCurrentTarget();
         SetPlanetInfo(p, GameManager.Instance.CurrentMode);
 
-        //SetPlanetTitle(PlanetTextCSVLoader.Instance.GetNombre(p));
+        SetPlanetTitle(p);
         //BuildPlanetPages(p.GetId());
 
 

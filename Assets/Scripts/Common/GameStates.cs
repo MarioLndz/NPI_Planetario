@@ -1,4 +1,4 @@
 public enum GameStates
 {
-    StandBy, MainPanel, MainView, ZoomView    
+    StandBy, MapsPanel, MainPanel, MainView, ZoomView    
 }

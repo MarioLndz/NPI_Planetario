@@ -12,14 +12,6 @@ public enum Language
     // añade más si los usas
 }
 
-[Serializable]
-public class PlanetPageData
-{
-    public string planetId;
-    public int page;
-    public string title;
-    public string body;
-}
 
 public class PlanetTextCSVLoader : MonoBehaviour
 {
@@ -48,6 +40,8 @@ public class PlanetTextCSVLoader : MonoBehaviour
     public List<Language> languages = new List<Language>();
 
     // =======================
+
+    public event Action languageChange;
 
     void Awake()
     {
@@ -126,7 +120,12 @@ public class PlanetTextCSVLoader : MonoBehaviour
 
     public void setLanguage(Language new_language)
     {
-        currentLanguage = new_language;
+        if (currentLanguage != new_language)
+        {
+            currentLanguage = new_language;
+            //Debug.Log("IDIOMA CAMBIADO");
+            languageChange?.Invoke();
+        }
     }
 
     [ContextMenu("Reload CSV")]

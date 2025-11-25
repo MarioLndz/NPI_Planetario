@@ -79,6 +79,7 @@ public class GameManager : MonoBehaviour
         Debug.Log($"Modo cambiado a: {mode}");
 
         UIManager.Instance?.ShowModeBanner(mode);
+        uiManager.refreshUI();
         // Aquí activa la versión del juego:
         // UIManager.Instance.ShowBanner(mode);
         // Cargar perfil de dificultad, etc.
@@ -122,6 +123,7 @@ public class GameManager : MonoBehaviour
         _state = GameStates.MainPanel;
 
         uiManager.GoToMainPanel();
+        uiManager.refreshUI();
     }
 
     public void GoToMuseumMap()
@@ -274,6 +276,12 @@ public class GameManager : MonoBehaviour
             uiManager.HideTutorial();
         }
 
+        if (_state == GameStates.MapsPanel)
+        {
+            CloseMapsPanel();
+            return;
+        }
+
         if (_state == GameStates.MainView)
         {
             GoToMainPanel();
@@ -288,6 +296,33 @@ public class GameManager : MonoBehaviour
     public void ResetScene()
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+    }
+
+    public void OpenMapsPanel ()
+    {
+        _state = GameStates.MapsPanel;
+
+        if (_showSwipeBackTutorial)
+        {
+            uiManager.ShowTutorial(2);
+        }
+
+        uiManager.OpenMapsPanel();
+        uiManager.refreshUI();
+    }
+
+    public void CloseMapsPanel ()
+    {
+        _state = GameStates.MainPanel;
+
+        if (uiManager.tutorialPlaying >= 1)
+        {
+            uiManager.HideTutorial();
+        }
+
+        uiManager.CloseMapsPanel();
+        uiManager.refreshUI();
+
     }
 
 }
