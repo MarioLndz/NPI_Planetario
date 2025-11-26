@@ -1,7 +1,16 @@
-﻿using UnityEngine;
+﻿using Leap;
+using UnityEngine;
 using UnityEngine.SceneManagement; // Necesario para reiniciar la escena
-using Leap;
+using UnityEngine.XR;
 
+/********************************************************************/
+//Esta clase controla si hay manos en el Leap y resetea la escena por
+//inactividad. Cada Update de consulta el CurrentFrame del
+//LeapServiceProvider.
+//También desactiva el panel StandBy la primera vez que se detectan las
+//manos y a partir de ese momento ai no hay manos va incrementando 
+//currentTimer hasta que llega a timeToReset, y se reinicia la escena
+/********************************************************************/
 public class SceneAutoReset : MonoBehaviour
 {
     [Header("Configuración Leap")]
@@ -45,7 +54,7 @@ public class SceneAutoReset : MonoBehaviour
             // Si el tiempo supera el límite establecido
             if (currentTimer >= timeToReset)
             {
-                Debug.Log("⏳ Tiempo de inactividad excedido. Reiniciando escena...");
+                Debug.Log("Tiempo de inactividad excedido. Reiniciando escena...");
                 GameManager.Instance.ResetScene();
             }
         }

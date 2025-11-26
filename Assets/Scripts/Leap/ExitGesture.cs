@@ -1,9 +1,16 @@
 using UnityEngine;
 using Leap;
 
+/*********************************************************************/
+//Esta clase detecta un gesto de salida levantando ambas palmas hacia
+//arriba con Leap Motion.
+//Comprueba que se vean las dos manos, con la palma orientada hacia arriba,
+//y exige mantener la pose cierto tiempo.
+//Al completar el tiempo configurado, cierra la aplicación.
+/*********************************************************************/
 public class ExitGesture : MonoBehaviour
 {
-    public LeapProvider leapProvider; // Arrastra aquí tu LeapServiceProvider
+    public LeapProvider leapProvider; 
 
     [Tooltip("Tiempo necesario manteniendo el gesto para salir")]
     public float holdTimeParams = 3.0f;
@@ -59,9 +66,6 @@ public class ExitGesture : MonoBehaviour
 
         currentHoldTime += Time.deltaTime;
 
-        // Opcional: Feedback visual en consola tipo "Saliendo en 3, 2, 1..."
-        // Debug.Log($"Saliendo en: {holdTimeParams - currentHoldTime:F1}");
-
         if (currentHoldTime >= holdTimeParams)
         {
             SalirDeLaApp();
@@ -78,10 +82,8 @@ public class ExitGesture : MonoBehaviour
     {
         Debug.Log("!!! SALIENDO DE LA APLICACIÓN !!!");
 
-        // Esto cierra la app construida (.exe / .apk)
         Application.Quit();
 
-        // Esto para el juego si estás en el Editor de Unity
         #if UNITY_EDITOR
         UnityEditor.EditorApplication.isPlaying = false;
         #endif

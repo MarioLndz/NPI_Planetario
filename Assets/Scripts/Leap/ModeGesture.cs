@@ -1,6 +1,14 @@
 using UnityEngine;
 using Leap;
 
+/************************************************************/
+//Esta clase detecta poses de mano con Leap Motion para cambiar
+//el modo de juego (Kid, Normal, Expert).
+// Comprueba orientación de la palma, dedos extendidos y exige
+// mantener la pose un tiempo mínimo.
+// Aplica cooldown entre detecciones y notifica el modo elegido
+// al GameManager. 
+/************************************************************/
 public class PoseGestureDetector : MonoBehaviour
 {
     [Header("Leap")]
@@ -66,7 +74,7 @@ public class PoseGestureDetector : MonoBehaviour
         lastAcceptTime = Time.time;
         poseTimer = 0f;
 
-        // ¡Gesto aceptado!
+        // Gesto aceptado
         GameManager.Instance?.SetMode(pose.Value);
     }
 }

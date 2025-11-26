@@ -1,13 +1,21 @@
 using UnityEngine;
 using Leap;
 
+/***************************************************************/
+// Esta clase detecta gestos de swipe con la mano derecha usando
+// Leap Motion.
+// Analiza la velocidad de la palma para detectar swipes horizontales
+// y hacia atrás.
+// Notifica los gestos detectados al GameManager aplicando umbral
+// de velocidad y cooldown.
+/***************************************************************/
 public class SwipeGestureDetector : MonoBehaviour
 {
     public LeapServiceProvider provider;
 
     [Header("Parámetros del gesto")]
     public float swipeSpeed = 1.5f;           // velocidad mínima (m/s)
-    public float limitTangent = 0.6f;         // (Antes verticalLimit) proporción para filtrar gestos en otros ejes
+    public float limitTangent = 0.6f;         // proporción para filtrar gestos en otros ejes
     public float cooldown = 1.0f;             // tiempo mínimo entre gestos (segundos)
     public float maxGrabStrength = 0.3f;      // mano abierta (no puño)
 
@@ -20,7 +28,7 @@ public class SwipeGestureDetector : MonoBehaviour
         Frame frame = provider.CurrentFrame;
         if (frame == null || frame.Hands.Count == 0) return;
 
-        // ⬇️ SOLO MANO DERECHA
+        // SOLO MANO DERECHA
         Hand rightHand = frame.Hands.Find(h => h.IsRight);
         if (rightHand == null) return;
 
@@ -52,7 +60,6 @@ public class SwipeGestureDetector : MonoBehaviour
         // Y debe ser el movimiento dominante (mayor que Y y mayor que Z)
         if (absX > swipeSpeed && absX > absY && absX > absZ)
         {
-            // Filtro extra: que los otros ejes no superen el límite proporcional
             if (absY < limitTangent * absX && absZ < limitTangent * absX)
             {
                 if (vx > 0)
@@ -77,18 +84,15 @@ public class SwipeGestureDetector : MonoBehaviour
             // Filtro extra
             if (absY < limitTangent * absZ && absX < limitTangent * absZ)
             {
-                // NOTA: En Unity/Leap, generalmente "Atrás" (hacia el usuario) es Z negativo
-                // Si usas el Leap en modo "Head Mounted" (VR), esto podría invertirse.
 
-                if (vz < 0) // < 0 suele ser "tirar hacia atrás" (pull)
+                if (vz < 0) 
                 {
-                    // Asegúrate de crear este método en tu GameManager
                     GameManager.Instance.HandleSwipeBack(hand); 
                     Debug.Log("⬇️ Swipe Atrás (Pull)");
 
                     lastSwipeTime = Time.time;
                 }
-                // Si quisieras swipe hacia adelante (Push), sería else { if (vz > 0) ... }
+                
             }
         }
     }

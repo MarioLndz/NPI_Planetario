@@ -9,8 +9,17 @@ public enum Language
     English = 1,
     French = 2,
     German = 3
-    // añade más si los usas
 }
+
+/*****************************************************************/
+//Esta clase gestiona la base de datos de textos multi-idioma a partir
+//de un CSV, usando un patrón Singleton accesible desde cualquier
+//escena.
+//Carga y parsea el fichero (ID;SPANISH;ENGLISH;...), almacenando los
+//textos por ID e idioma, con idioma por defecto y fallbacks.
+//Expone una API (GetText, GetInfo, GetNombre, SGet…) y un evento para
+//notificar cambios de idioma al resto de la UI y sistemas.
+/*****************************************************************/
 
 
 public class PlanetTextCSVLoader : MonoBehaviour
@@ -22,8 +31,8 @@ public class PlanetTextCSVLoader : MonoBehaviour
 
     // ---------- Config (TEXTOS SIMPLES) ----------
     [Header("Texto genérico (multi-idioma)")]
-    public TextAsset csvFile;                           // CSV antiguo: ID;SPANISH;ENGLISH;...
-    public string resourcesPath = "planet_texts_multi"; // O pon el CSV en Resources/planet_texts_multi.csv
+    public TextAsset csvFile;                           
+    public string resourcesPath = "planet_texts_multi"; 
 
     // =======================
 
@@ -81,7 +90,7 @@ public class PlanetTextCSVLoader : MonoBehaviour
                 break;
         }
 
-        // API antigua: mercurio_info_0, etc.
+        
         string info_id = planet.GetId() + "_info_" + mode_int;
         return GetText(info_id);
     }
@@ -110,12 +119,11 @@ public class PlanetTextCSVLoader : MonoBehaviour
         return id;
     }
 
-    // Compatibilidad con código antiguo que pasa string
     public string GetText(string id, string language)
     {
         if (TryParseLanguage(language, out var lang))
             return GetText(id, lang);
-        return GetText(id); // fallback
+        return GetText(id); 
     }
 
     public void setLanguage(Language new_language)
@@ -147,7 +155,7 @@ public class PlanetTextCSVLoader : MonoBehaviour
             return;
         }
 
-        Parse(csv); // ; fijo
+        Parse(csv); 
 #if UNITY_EDITOR
         Debug.Log($"[PlanetTextCSVLoader] TEXTOS OK. IDs={db.Count}. Idiomas=[{string.Join(", ", languages)}]. Default={defaultLanguage}");
 #endif
@@ -170,7 +178,6 @@ public class PlanetTextCSVLoader : MonoBehaviour
         if (!header[0].Equals("ID", StringComparison.OrdinalIgnoreCase))
             Debug.LogWarning($"[PlanetTextCSVLoader] Primera columna no es 'ID' sino '{header[0]}'. Se usará igualmente.");
 
-        // Mapea columnas a enum Language
         var colToLang = new Dictionary<int, Language>();
         for (int c = 1; c < header.Count; c++)
         {
@@ -247,10 +254,8 @@ public class PlanetTextCSVLoader : MonoBehaviour
         lang = default;
         if (string.IsNullOrWhiteSpace(s)) return false;
 
-        // Normaliza
         s = s.Trim();
 
-        // Aliases comunes
         switch (s.ToUpperInvariant())
         {
             case "ES":
@@ -273,7 +278,6 @@ public class PlanetTextCSVLoader : MonoBehaviour
                 lang = Language.German; return true;
         }
 
-        // Fallback: usa nombres del enum (case-insensitive)
         return Enum.TryParse(s, true, out lang);
     }
 }

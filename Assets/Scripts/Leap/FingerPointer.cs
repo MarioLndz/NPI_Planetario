@@ -2,6 +2,11 @@
 using UnityEngine.UI;
 using Leap;
 
+/****************************************************************/
+//Esta clase controla un puntero de ratón UI usando la mano derecha
+//detectada por Leap Motion.
+//Muestra el puntero al detectar la mano y aplica un fade out progresivo cuando la mano desaparece.
+/****************************************************************/
 public class LeapMousePointer : MonoBehaviour
 {
     public LeapServiceProvider leapProvider; // Leap provider
@@ -12,18 +17,15 @@ public class LeapMousePointer : MonoBehaviour
     [Range(0f, 1f)]
     public float smoothing = 0.25f;          // Suavizado (0 = sin filtro, 1 = muy suave)
 
-    // --- NUEVAS VARIABLES PARA EL FADE ---
     [Header("Fade Out Settings")]
     public float fadeOutDelay = 2.0f;        // Tiempo para empezar el fade out
     private float handLostTimer = 0.0f;      // Temporizador interno
     private CanvasGroup pointerCanvasGroup;  // Referencia al CanvasGroup para el fade
-    // --- FIN NUEVAS VARIABLES ---
 
     private bool calibrated = false;
     private Vector3 neutralTip;
     private Vector3 smoothedTip;
 
-    // --- NUEVO MÉTODO Start() ---
     void Start()
     {
         // Obtenemos el componente CanvasGroup
@@ -38,7 +40,6 @@ public class LeapMousePointer : MonoBehaviour
         pointerCanvasGroup.alpha = 0f;
         pointerUI.gameObject.SetActive(false);
     }
-    // --- FIN NUEVO MÉTODO Start() ---
 
 
     void Update()
@@ -65,7 +66,7 @@ public class LeapMousePointer : MonoBehaviour
             // 2. Lógica de cálculo de posición usando la mano derecha
             Vector3 palm = hand.PalmPosition;
 
-            // 🔹 Ignorar el eje Z (mantener solo plano XY)
+            // Ignorar el eje Z (mantener solo plano XY)
             palm.z = 0f;
 
             if (!calibrated)
@@ -75,7 +76,6 @@ public class LeapMousePointer : MonoBehaviour
                 calibrated = true;
             }
 
-            // Suavizado adaptativo
             float distance = Vector3.Distance(smoothedTip, palm);
             float adaptiveSmooth = Mathf.Lerp(0.8f, 0.2f, Mathf.Clamp01(distance * 10f));
             smoothedTip = Vector3.Lerp(smoothedTip, palm, (1 - smoothing) * (1 - adaptiveSmooth) + smoothing);
@@ -101,7 +101,7 @@ public class LeapMousePointer : MonoBehaviour
         {
             // --- NO HAY MANO DERECHA (o no hay manos) ---
 
-            calibrated = false; // Perder calibración
+            calibrated = false;
 
             // Solo procesar el fade si el puntero estaba activo
             if (pointerUI.gameObject.activeSelf)
@@ -114,8 +114,6 @@ public class LeapMousePointer : MonoBehaviour
 
                 // Aplicar el alfa
                 pointerCanvasGroup.alpha = Mathf.Clamp01(newAlpha);
-
-                // No actualizamos pointerUI.position → se queda en la última posición conocida
 
                 // Si el temporizador se completó, desactivar el objeto
                 if (handLostTimer >= fadeOutDelay)

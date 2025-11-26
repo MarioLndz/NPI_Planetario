@@ -1,6 +1,13 @@
 using TMPro;
 using UnityEngine;
 
+/****************************************************************************/
+//Esta clase gestiona los textos de la UI de la escena del plano 3D usando la
+//base de datos de textos PlanetTextCSVLoader.
+//Actualiza el título y el botón de “Volver” según el idioma activo,
+//permitiendo también cambiar el idioma y refrescar los textos al vuelo.
+/****************************************************************************/
+
 public class Plano3DUI : MonoBehaviour
 {
     public TMP_Text titleText;        // Título del plano 3D
@@ -29,10 +36,10 @@ public class Plano3DUI : MonoBehaviour
         if (textsDB == null) textsDB = PlanetTextCSVLoader.Instance;
 
         if (titleText)
-            titleText.text = textsDB.GetText("map3d_title");        // clave en tu CSV
+            titleText.text = textsDB.GetText("map3d_title");        
 
         if (backButtonText)
-            backButtonText.text = textsDB.GetText("map3d_back");    // otra clave en tu CSV
+            backButtonText.text = textsDB.GetText("map3d_back");    
     }
 }
 

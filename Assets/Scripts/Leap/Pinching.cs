@@ -1,9 +1,20 @@
-﻿using UnityEngine;
-using UnityEngine.EventSystems;
-using UnityEngine.UI;          // ⟵ para GraphicRaycaster
+﻿using Leap;
+using System;
 using System.Collections.Generic;
-using Leap;
+using System.Net.NetworkInformation;
+//using System.Numerics;
+using UnityEditor;
+using UnityEditor.Experimental.GraphView;
+using UnityEngine;
+using UnityEngine.EventSystems;
+using UnityEngine.UI;          
 
+/*****************************************************************************/
+//Esta clase convierte el gesto de pinch con la mano derecha (Leap) en “clicks”
+//sobre la interfaz y sobre los planetas.
+//Esta clase permite seleccionar tanto botones de interfaz como planetas 3D usando
+//únicamente el gesto de pinza.
+/*****************************************************************************/
 public class LeapPlanetSelector : MonoBehaviour
 {
     [Header("Referencias")]
@@ -13,7 +24,7 @@ public class LeapPlanetSelector : MonoBehaviour
 
     [Header("UI Raycasting")]
     public Canvas pointerCanvas;
-    public EventSystem eventSys;           // ⟵ opcional: referencia explícita
+    public EventSystem eventSys;           
 
     [Header("Pinch Detection (Strength)")]
     [Range(0f, 1f)] public float pinchOnThreshold = 0.9f;
@@ -44,6 +55,18 @@ public class LeapPlanetSelector : MonoBehaviour
         if (eventSys == null) eventSys = EventSystem.current;
     }
 
+    //----------------------------------------------------//
+    //Este método lee el CurrentFrame del LeapServiceProvider
+    //y toma solo la mano derecha. A partir de PinchStrength
+    //y con dos umbrales decide cual de las dos siguientes
+    //acciones realizar:
+    //
+    //pinchOnThreshold, transición a estado “pinch activo”
+    //(inicio de click). Cuando se detecta el inicio del pinch,
+    //llama a TrySelectPlanet
+    //
+    //pinchOffThreshold, salida del estado “pinch”.
+    //----------------------------------------------------//
     void Update()
     {
         Frame frame = leapProvider.CurrentFrame;
@@ -53,11 +76,11 @@ public class LeapPlanetSelector : MonoBehaviour
             return;
         }
 
-        // ➜ SOLO MANO DERECHA
+        //SOLO MANO DERECHA
         Hand hand = frame.Hands.Find(h => h.IsRight);
         if (hand == null)
         {
-            // No hay mano derecha visible → no hacemos nada
+            // No hay mano derecha visible, no hacemos nada
             if (isPinching) isPinching = false;
             return;
         }
@@ -75,6 +98,12 @@ public class LeapPlanetSelector : MonoBehaviour
         }
     }
 
+    //---------------------------------------------------------------------------------//
+    //Este método primero lanza un raycast de UI en la posición del puntero Leap y,
+    //si encuentra un botón u otro elemento clicable, simula un click completo sobre él.
+    //Si no hay UI clicada, hace un SphereCast en 3D desde la cámara y, si golpea un
+    //PlanetClickable, ejecuta su OnPointerClick(selecciona el planeta).
+    //---------------------------------------------------------------------------------//
     public void TrySelectPlanet()
     {
         if (!eventSystemChecked) return;
@@ -91,7 +120,7 @@ public class LeapPlanetSelector : MonoBehaviour
         };
 
         var results = new List<RaycastResult>();
-        EventSystem.current.RaycastAll(ped, results); // ← consulta a TODOS los BaseRaycasters
+        EventSystem.current.RaycastAll(ped, results); // consulta a TODOS los BaseRaycasters
 
         for (int i = 0; i < results.Count; i++)
         {
@@ -113,7 +142,7 @@ public class LeapPlanetSelector : MonoBehaviour
                 ExecuteEvents.Execute(handlerGo, ped, ExecuteEvents.pointerUpHandler);
                 ExecuteEvents.Execute(handlerGo, ped, ExecuteEvents.pointerClickHandler);
 
-                Debug.Log($"🖱️ Pinch UI → Click en {handlerGo.name} (hit: {rr.gameObject.name})");
+                Debug.Log($"Pinch UI → Click en {handlerGo.name} (hit: {rr.gameObject.name})");
                 return; // ya clicamos UI; no seguimos con 3D
             }
         }
@@ -127,7 +156,7 @@ public class LeapPlanetSelector : MonoBehaviour
             {
                 var eventData = new PointerEventData(EventSystem.current);
                 clickable.OnPointerClick(eventData);
-                Debug.Log($"🌍 Pinch sobre {hit.collider.name} → Click ejecutado.");
+                Debug.Log($"Pinch sobre {hit.collider.name} → Click ejecutado.");
             }
             else
             {

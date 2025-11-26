@@ -3,6 +3,16 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Video;
 
+/*****************************************************************/
+//Esta clase gestiona los vídeos de tutorial mediante un patrón
+//Singleton, controlando uno o varios VideoPlayer.
+//Permite reproducir clips según idioma y tipo de gesto (click,
+//swipe derecha/izquierda/atrás), incluyendo un modo bucle guiado.
+//Lleva la cuenta de los loops por reproductor para activar o
+//mutear el audio solo en determinados ciclos y poder detener
+//el tutorial cuando se desee.
+/*****************************************************************/
+
 public class VideoManager : MonoBehaviour
 {
     // --- Singleton ---
@@ -120,9 +130,6 @@ public class VideoManager : MonoBehaviour
     {
         playerArribaIzq.Stop();
     }
-    /// <summary>
-    /// Configura el evento de loop y el estado inicial del audio.
-    /// </summary>
     private void ConfigurarPlayer(VideoPlayer vp)
     {
         if (vp == null) return;
@@ -143,9 +150,6 @@ public class VideoManager : MonoBehaviour
         vp.loopPointReached += OnLoopPointReached;
     }
 
-    /// <summary>
-    /// Se ejecuta automáticamente cada vez que un video termina y vuelve a empezar.
-    /// </summary>
     private void OnLoopPointReached(VideoPlayer vp)
     {
         if (!loopCounters.ContainsKey(vp)) return;
@@ -170,9 +174,6 @@ public class VideoManager : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// Helper para mutear/desmutear todas las pistas de audio del video.
-    /// </summary>
     private void SetAudioMute(VideoPlayer vp, bool mute)
     {
         // Recorremos las pistas de audio (normalmente es 1, pero por si acaso)
@@ -182,14 +183,12 @@ public class VideoManager : MonoBehaviour
         }
     }
 
-    // Es buena práctica desuscribirse de los eventos si el objeto se destruye
     void OnDestroy()
     {
         if (playerArribaIzq != null) playerArribaIzq.loopPointReached -= OnLoopPointReached;
         if (playerMitad != null) playerMitad.loopPointReached -= OnLoopPointReached;
     }
 
-    // Update is called once per frame
     void Update()
     {
 

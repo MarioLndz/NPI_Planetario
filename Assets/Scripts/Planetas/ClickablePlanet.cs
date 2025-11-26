@@ -1,7 +1,14 @@
 ﻿using UnityEngine;
 using UnityEngine.EventSystems;
 
-// Pon este script en cada objeto Planeta que sea clickeable
+/*****************************************************************/
+//Esta clase permite que un planeta sea clickeable mediante eventos
+//de UI.
+// Al hacer clic, avisa al GameManager para que realice el zoom hacia
+// ese planeta concreto.
+// Da un ID interno del planeta para identificarlo en otros sistemas
+// (CSV, datos, etc.).
+/*****************************************************************/
 public class PlanetClickable : MonoBehaviour, IPointerClickHandler
 {
     [Header("Datos del Planeta")]
@@ -11,9 +18,6 @@ public class PlanetClickable : MonoBehaviour, IPointerClickHandler
     [SerializeField] private string _id_planeta;
 
 
-    /// <summary>
-    /// Se llama cuando se hace clic en este objeto.
-    /// </summary>
     public void OnPointerClick(PointerEventData eventData)
     {
         // 1. Busca el controlador de la cámara (que está en la cámara)

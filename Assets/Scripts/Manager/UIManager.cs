@@ -1,13 +1,30 @@
-﻿using System.Collections;
+﻿using Codice.CM.Common;
+using NUnit.Framework;
+using NUnit.Framework.Internal;
+using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Numerics;
 using TMPro;
+using UnityEditor;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.UI;
+//using static System.Net.Mime.MediaTypeNames;
+using static UnityEditor.PlayerSettings;
 using static UnityEngine.Rendering.DebugUI;
+using static UnityEngine.Rendering.VolumeComponent;
 
 
-
+/*****************************************************************/
+//Esta clase se encarga de gestionar toda la UI del planetario. Es
+//un singleton (UIManager.Instance) al que acceden otros sistemas.
+//Gestiona qué paneles están visibles (stand-by, menú principal,
+//panel de planeta, mapas, banner de modo, tutoriales) y cómo
+//aparecen/desaparecen usando efectos de fade. Actualiza los textos
+//multi-idioma usando PlanetTextCSVLoader y reacciona cuando cambia el
+//idioma. Ademas coordina la UI con el GameManager.
+/*****************************************************************/
 public class UIManager : MonoBehaviour
 {
     // --- Singleton ---
@@ -78,6 +95,11 @@ public class UIManager : MonoBehaviour
 
     public int tutorialPlaying = -1;
 
+    //---------------------------------------------------------------//
+    //Configura el patrón singleton.
+    //Entrada: ninguna.
+    //Salida: ninguna.Si ya hay otro UIManager, destruye este objeto.
+    //---------------------------------------------------------------//
     void Awake()
     {
         // Configura el Singleton
@@ -92,6 +114,12 @@ public class UIManager : MonoBehaviour
 
     }
 
+    //---------------------------------------------------------------//
+    //Inicializa referencias, se suscribe al evento de cambio de
+    //idioma(textsDB.languageChange += refreshUI) y deja los paneles en
+    //su estado inicial(stand-by activo, resto oculto).
+    //Entrada/Salida: ninguna.
+    //---------------------------------------------------------------//
     private void Start()
     {
         textsDB = PlanetTextCSVLoader.Instance;
@@ -113,6 +141,12 @@ public class UIManager : MonoBehaviour
 
     }
 
+    //---------------------------------------------------------------//
+    //Manejador del botón de “Start visit”: oculta el menú inicial con
+    //fade y avisa al GameManager para iniciar la visita.
+    //Entrada: ninguna(se llama desde la UI).
+    //Salida: ninguna.
+    //---------------------------------------------------------------//
     public void ClickedStart()
     {
         //Debug.Log("Clicked Start");
@@ -120,6 +154,12 @@ public class UIManager : MonoBehaviour
         GameManager.Instance.StartVisit();
     }
 
+    //---------------------------------------------------------------//
+    //Oculta el menú de inicio y muestra el panel de mapas, inicializando
+    //el sprite a “Planta baja”.
+    //Entrada: ninguna.
+    //Salida: ninguna.
+    //---------------------------------------------------------------//
     public void OpenMapsPanel()
     {
         // Ocultamos menú de inicio y mostramos PanelMapas
@@ -129,6 +169,10 @@ public class UIManager : MonoBehaviour
             mapsImage.sprite = plantaBajaSprite;
     }
 
+    //---------------------------------------------------------------//
+    //Hace lo inverso: oculta el panel de mapas y vuelve a mostrar el
+    //menú de inicio.
+    //---------------------------------------------------------------//
     public void CloseMapsPanel()
     {
         // Volver al menú de inicio
@@ -136,9 +180,10 @@ public class UIManager : MonoBehaviour
         if (startMenuCanvas) ShowPanelFade(startMenuCanvas, true);
     }
 
-    // --- NUEVO: elegir planta ---
-    // Solo cambian el sprite de mapsImage
-
+    //---------------------------------------------------------------//
+    //Los siguientes métodos cambian la imagen de mapas al sprite de
+    //la planta correspondiente.
+    //---------------------------------------------------------------//
     public void ShowPlantaBaja()
     {
         if (mapsImage && plantaBajaSprite)
@@ -167,7 +212,10 @@ public class UIManager : MonoBehaviour
             mapsImage.sprite = terceraPlantaSprite;
     }
 
-
+    //---------------------------------------------------------------//
+    //Manejador del botón de “Mapa del museo 3D”: oculta el menú y
+    //delega en GameManager.GoToMuseumMap() para cambiar de escena.
+    //---------------------------------------------------------------//
     public void ClickedMuseumMap()
     {
         if (startMenuCanvas) ShowPanelFade(startMenuCanvas, false);
@@ -176,18 +224,29 @@ public class UIManager : MonoBehaviour
         GameManager.Instance.GoToMuseumMap();
     }
 
+    //---------------------------------------------------------------//
+    //Vuelve a mostrar el menú principal.
+    //---------------------------------------------------------------//
     public void GoToMainPanel()
     {
         if (startMenuCanvas) ShowPanelFade(startMenuCanvas, true);
     }
 
+    //---------------------------------------------------------------//
+    //Transición desde la pantalla de stand-by al menú principal, con
+    //fades independientes en cada panel.
+    //---------------------------------------------------------------//
     public void SalirStandBy ()
     {
         ShowPanelFade(standByCanva, false, 1f);
         ShowPanelFade(startMenuCanvas, true, 1.5f);
     }
 
-    //Metodo para probar los modos porque no tengo el leap
+    //---------------------------------------------------------------//
+    //Método de prueba para cambiar el GameMode por ciclos
+    //(Kid -> Normal -> Expert -> Kid) cuando no se usa Leap;
+    //llama a GameManager.SetMode.
+    //---------------------------------------------------------------//
     public void ChangeMode()
     {
         GameMode? pose = null;
@@ -210,17 +269,24 @@ public class UIManager : MonoBehaviour
 
     }
 
-    // --------- NUEVO: método genérico con fade ----------
-    /// <summary>
-    /// Muestra u oculta un panel con fade usando CanvasGroup.
-    /// </summary>
+    //---------------------------------------------------------------//
+    //Método genérico para mostrar u ocultar un panel con fade usando CanvasGroup.
+    //Entrada:
+    //panel: panel a animar.
+    //show: true = fade in, false = fade out.
+    //duration: duración del fade(por defecto defaultFadeDuration).
+    //setInteractable: si debe activar/desactivar interactable.
+    //setBlocksRaycasts: si debe activar/desactivar blocksRaycasts.
+    //
+    //Salida: ninguna (lanza una corrutina interna que hace la animación).
+    //---------------------------------------------------------------//
     public void ShowPanelFade(GameObject panel, bool show = true, float? duration = null, bool setInteractable = true, bool setBlocksRaycasts = true)
     {
         if (panel == null) return;
 
         // Si vamos a MOSTRAR y el panel está inactivo, creamos/aseguramos el CanvasGroup con alpha=0 antes de activarlo
         CanvasGroup cg = (!panel.activeSelf && show)
-            ? EnsureCanvasGroup(panel, initialAlpha: 0f)   // ⟵ clave: invisible antes de SetActive(true)
+            ? EnsureCanvasGroup(panel, initialAlpha: 0f)   // clave: invisible antes de SetActive(true)
             : EnsureCanvasGroup(panel);                    // reutiliza el existente sin forzar alpha
 
         if (show && !panel.activeSelf)
@@ -232,7 +298,7 @@ public class UIManager : MonoBehaviour
         if (_runningFades.TryGetValue(panel, out var co) && co != null)
             StopCoroutine(co);
 
-        // Si hacemos fade IN, habilita input durante la transición (opcional)
+        // Si hacemos fade IN, habilita input durante la transición 
         if (show)
         {
             if (setInteractable) cg.interactable = true;
@@ -252,7 +318,6 @@ public class UIManager : MonoBehaviour
     {
         float start = cg.alpha;
         float t = 0f;
-        // Asegurar que durante el fade respondamos a input si estamos mostrando
         if (target > start)
         {
             if (setInteractable) cg.interactable = true;
@@ -267,7 +332,7 @@ public class UIManager : MonoBehaviour
         {
             while (t < duration)
             {
-                t += Time.unscaledDeltaTime; // UI suele ir con tiempo no escalado
+                t += Time.unscaledDeltaTime; 
                 float k = fadeEase.Evaluate(Mathf.Clamp01(t / duration));
                 cg.alpha = Mathf.Lerp(start, target, k);
                 yield return null;
@@ -293,9 +358,14 @@ public class UIManager : MonoBehaviour
         if (initialAlpha.HasValue) cg.alpha = initialAlpha.Value;
         return cg;
     }
-    // -----------------------------------------------------
 
-    // Mantengo tu API, pero ahora usa fade:
+    //---------------------------------------------------------------//
+    //Muestra u oculta el panel de información del planeta actual.
+    //Si show es true, refresca título y descripción según el planeta
+    //objetivo y el modo de juego.
+    //Entrada: show(true/false).
+    //Salida: ninguna.
+    //---------------------------------------------------------------//
     public void ShowPlanetPanel(bool show = true)
     {
         if (!PlanetMenu)
@@ -322,11 +392,18 @@ public class UIManager : MonoBehaviour
         ShowPanelFade(PlanetMenu, show);
     }
 
+    //---------------------------------------------------------------//
+    //Escribe en planetTitle el nombre del planeta.
+    //---------------------------------------------------------------//
     public void SetPlanetTitle(PlanetClickable planet)
     {
         if (planetTitle) planetTitle.text = textsDB.GetNombre(planet);
     }
 
+    //---------------------------------------------------------------//
+    //Rellena la descripción (planetDescription) con el texto
+    //correspondiente al planeta y al modo (Kid/Normal/Expert)
+    //---------------------------------------------------------------//
     public void SetPlanetInfo(PlanetClickable planet, GameMode mode)
     {
         if (planetDescription)
@@ -337,6 +414,12 @@ public class UIManager : MonoBehaviour
         }
     }
 
+    //---------------------------------------------------------------//
+    //Intenta convertir newLanguage a Language(TryParseLanguage),
+    //cambia el idioma actual en PlanetTextCSVLoader y llama a refreshUI().
+    //Entrada: código de idioma como string ("ES", "EN", etc.).
+    //Salida: ninguna.
+    //---------------------------------------------------------------//
     public void changeLanguage(string newLanguage)
     {
         Language lan;
@@ -348,6 +431,12 @@ public class UIManager : MonoBehaviour
         }
     }
 
+    //---------------------------------------------------------------//
+    //Actualiza textos de la UI según el estado global del juego:
+    //En MainPanel: textos de botones del menú y título del planetario.
+    //En MapsPanel: textos del panel de mapas(título, botón atrás, nombres de plantas).
+    //En vista de planetas: título y descripción del planeta objetivo.
+    //---------------------------------------------------------------//
     public void refreshUI()
     {
         if (GameManager.Instance.GetState() == GameStates.MainPanel)
@@ -397,6 +486,9 @@ public class UIManager : MonoBehaviour
 
     }
 
+    //---------------------------------------------------------------//
+    //Desactiva los GameObjects kidContent, normalContent y expertContent.
+    //---------------------------------------------------------------//
     private void HideAllModeContents()
     {
         if (kidContent) kidContent.SetActive(false);
@@ -404,6 +496,12 @@ public class UIManager : MonoBehaviour
         if (expertContent) expertContent.SetActive(false);
     }
 
+    //---------------------------------------------------------------//
+    //Muestra el banner de modo: desactiva todos los contenidos,
+    //activa solo el correspondiente al mode, hace fade in del panel y programa un fade out tras modeBannerDuration.
+    //Entrada: modo actual(GameMode).
+    //Salida: ninguna.
+    //---------------------------------------------------------------//
     public void ShowModeBanner(GameMode mode)
     {
         if (!modeBannerPanel) return;
@@ -441,7 +539,12 @@ public class UIManager : MonoBehaviour
         ShowPanelFade(modeBannerPanel, false);
     }
 
-
+    //---------------------------------------------------------------//
+    //Muestra el canvas de tutoriales, llama a VideoManager.PlayTutorial(id)
+    //y guarda qué tutorial está activo en tutorialPlaying.
+    //Entrada: id del tutorial(0 = click, 1 = swipe, 2 = swipe back).
+    //Salida: ninguna.
+    //---------------------------------------------------------------//
 
     public void ShowTutorial (int id = 0)
     {
@@ -450,6 +553,10 @@ public class UIManager : MonoBehaviour
         ShowPanelFade(tutorialsCanva, true);
     }
 
+    //---------------------------------------------------------------//
+    //Oculta el canvas de tutoriales con fade, pone tutorialPlaying a -1
+    //y detiene el vídeo actual
+    //---------------------------------------------------------------//
     public void HideTutorial()
     {
         tutorialPlaying = -1;

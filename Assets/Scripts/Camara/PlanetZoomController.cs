@@ -1,9 +1,18 @@
-﻿using System; // <-- para Action
+﻿using NUnit.Framework;
+using System;
 using System.Collections;
 using System.Collections.Generic;
+//using System.Numerics;
 using UnityEngine;
+using UnityEngine.UIElements;
 
-// Pon este script en tu objeto Main Camera
+/**********************************************************************/
+//Esta clase se se encarga de controlar la cámara cuando se hace zoom
+//sobre los planetas y al navegar entre ellos. Guarda la posición y
+//rotación por defecto de la cámara y un planeta objetivo actual
+//(currentTarget), más una lista ordenada de planetas (planets) para
+//moverse entre vecinos. 
+/**********************************************************************/
 public class PlanetZoomController : MonoBehaviour
 {
     [Header("Configuración de Zoom")]
@@ -24,8 +33,6 @@ public class PlanetZoomController : MonoBehaviour
    
     void Start()
     {
-        // Se asume que este script está en la cámara, pero
-        // Camera.main la encontrará de todas formas.
         cam = Camera.main;
         if (cam != null)
         {
@@ -34,16 +41,19 @@ public class PlanetZoomController : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// El planeta llama a esta función para solicitar un zoom.
-    /// </summary>
+    //--------------------------------------------------------------------------------------//
+    //Esta método hace lo siguiente. Recibe un planeta. Si ya está haciendo zoom, no hace nada.
+    //Si el planeta pedido es el que ya está seleccionado, realiza zoom out: vuelve la cámara a
+    //su posición inicial.
+    //Si es un planeta nuevo, calcula el nueva posición de la camara usando datos del planeta,
+    //orienta la cámara hacia él y lanza un zoom in.
+    //--------------------------------------------------------------------------------------//
     public bool? RequestZoom(PlanetClickable planet)
     {
         if (isZooming) return null;
 
         if (currentTarget == planet)
         {
-            // --- ZOOM OUT ---
             Debug.Log("Zoom Out");
             currentTarget = null;
             lastZoomIn = false;
@@ -52,7 +62,6 @@ public class PlanetZoomController : MonoBehaviour
         }
         else
         {
-            // --- ZOOM IN ---
             currentTarget = planet;
 
 
@@ -77,6 +86,10 @@ public class PlanetZoomController : MonoBehaviour
         }
     }
 
+    //--------------------------------------------------------------------------------------//
+    //Esta método hace lo siguiente. Permite ir al planeta vecino (izquierda/derecha) y pedir
+    //automáticamente el zoom a ese planeta, con opción de hacer wrap-around al principio/fin.
+    //--------------------------------------------------------------------------------------//
     public void SelectNeighbor(int dir, bool wrap = false)
     {
         if (currentTarget == null || planets == null || planets.Count == 0 || isZooming) return;
@@ -94,15 +107,12 @@ public class PlanetZoomController : MonoBehaviour
         else
         {
             next = Mathf.Clamp(next, 0, planets.Count - 1);
-            if (next == i) return; // ya estás en el extremo
+            if (next == i) return;
         }
 
         RequestZoom(planets[next]); // Zoom al vecino; GameManager actualizará la UI en OnZoomCompleted
     }
 
-    /// <summary>
-    /// Corrutina genérica para mover la cámara
-    /// </summary>
     private IEnumerator MoveCamera(Vector3 targetPos, Quaternion targetRot)
     {
         isZooming = true;

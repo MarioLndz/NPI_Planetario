@@ -3,15 +3,20 @@ using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
 using System.Collections;
 
+//*************************************************************//
+//Esta clase controla el efecto de desenfoque de fondo,  usado
+//por el GameManager para enfatizar u ocultar el entorno según
+//el estado de la visita.
+//*************************************************************//
 public class BlurVolume : MonoBehaviour
 {
     [Header("Parámetros existentes")]
-    public float focusDistance = 0.75f; // valor ON (ya lo tenías)
+    public float focusDistance = 0.75f; // valor ON
 
     [Header("Transición suave (sin weight)")]
     public float focusDistanceOff = 10f;         // valor OFF (lejos)
     public float fadeDuration = 0.5f;            // segundos
-    public AnimationCurve ease =                 // curva de suavizado
+    public AnimationCurve ease =                 
         AnimationCurve.EaseInOut(0, 0, 1, 1);
 
     private DepthOfField dof;
